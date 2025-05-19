@@ -66,7 +66,7 @@ elseif (NOT TARGET lua)
             INCLUDES DESTINATION include)
     endif()
     set(LUA_INCLUDE_DIR "${lua_SOURCE_DIR}")
-    set(LUA_LIBRARIES lua)
+    set(LUA_LIBRARY lua)
 endif()
 
 
