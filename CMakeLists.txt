@@ -132,7 +132,6 @@ include(cmake/CPM.cmake)
 
 add_subdirectory( 3rdparty )
 
-
 #########################  BASE library  ####################################
 
 set(PLOTJUGGLER_BASE_SRC
@@ -162,7 +161,7 @@ add_library(plotjuggler_base STATIC
     ${PLOTJUGGLER_BASE_MOCS}
 )
 
-target_link_libraries(plotjuggler_base PUBLIC
+target_link_libraries(plotjuggler_base PRIVATE
     plotjuggler_qwt
     ${LUA_LIBRARY}
     sol2
@@ -174,8 +173,6 @@ target_include_directories(plotjuggler_base
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plotjuggler_base/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plotjuggler_base/src>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qwt/src>
-
-        # $<INSTALL_INTERFACE:include>
 )
 
 

@@ -30,6 +30,7 @@ endif()
 ##### nlohmann_json ######
 
 find_package(nlohmann_json QUIET)
+
 if (nlohmann_json_FOUND)
     message(STATUS "Found nlohmann_json")
 elseif(NOT TARGET nlohmann_json)
@@ -65,9 +66,8 @@ elseif (NOT TARGET lua)
             RUNTIME DESTINATION bin
             INCLUDES DESTINATION include)
 
-        set(LUA_INCLUDE_DIR "${lua_SOURCE_DIR}")
-        message(STATUS "LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
-        set(LUA_LIBRARY lua)
+        set(LUA_LIBRARY lua CACHE PATH "Lua libraty" FORCE)
+        set(LUA_INCLUDE_DIR "${lua_SOURCE_DIR}" CACHE PATH "Lua include directory" FORCE)
     endif()
 endif()
 
@@ -119,6 +119,9 @@ elseif(NOT TARGET zstd)
     set(ZSTD_PROGRAMS "" CACHE STRING " " FORCE)
 
     add_subdirectory(${zstd_SOURCE_DIR}/build/cmake ${zstd_BINARY_DIR})
+    set(ZSTD_INCLUDE_DIR ${zstd_SOURCE_DIR}/lib)
+    set(ZSTD_LIBRARY zstd_static)
+    mark_as_advanced(ZSTD_INCLUDE_DIR ZSTD_LIBRARY)
 endif()
 
 find_package(LZ4 QUIET)
@@ -139,6 +142,7 @@ elseif(NOT TARGET lz4_static)
 
     set(LZ4_INCLUDE_DIR ${lz4_SOURCE_DIR}/lib)
     SET(LZ4_LIBRARIES lz4_static)
+    mark_as_advanced(LZ4_INCLUDE_DIR LZ4_LIBRARIES)
 endif()
 
 add_subdirectory( qwt/src )
