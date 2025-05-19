@@ -65,6 +65,8 @@ elseif (NOT TARGET lua)
             RUNTIME DESTINATION bin
             INCLUDES DESTINATION include)
     endif()
+    set(LUA_INCLUDE_DIR "${lua_SOURCE_DIR}")
+    set(LUA_LIBRARIES lua)
 endif()
 
 
@@ -121,7 +123,7 @@ find_package(LZ4 QUIET)
 
 if (LZ4_FOUND)
     message(STATUS "Found LZ4")
-elseif(NOT TARGET lz4)
+elseif(NOT TARGET lz4_static)
     ### lz4 ###
     CPMAddPackage(
         NAME lz4

@@ -164,7 +164,7 @@ add_library(plotjuggler_base STATIC
 
 target_link_libraries(plotjuggler_base PUBLIC
     plotjuggler_qwt
-    ${LUA_LIBRARY}
+    ${LUA_LIBRARIES}
     sol2
 )
 
