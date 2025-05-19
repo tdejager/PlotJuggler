@@ -15,10 +15,6 @@ if(NOT TARGET mcap)
     # mcap has no CMake support, so we create our own target
     add_library(mcap INTERFACE)
     target_include_directories(mcap INTERFACE "${mcap_SOURCE_DIR}/cpp/mcap/include")
-    target_link_libraries(mcap INTERFACE
-        ${LZ4_LIBRARIES}
-        ${ZSTD_LIBRARIES}
-    )
  endif()
 ########################################
 
@@ -29,15 +25,14 @@ add_library(DataLoadMCAP SHARED
     dialog_mcap.cpp
     ${UI_SRC}  )
 
-target_include_directories(DataLoadMCAP PRIVATE
-    $<BUILD_INTERFACE:${zstd_SOURCE_DIR}/lib>
-    $<BUILD_INTERFACE:${lz4_SOURCE_DIR}/lib>)
-
 target_link_libraries(DataLoadMCAP PRIVATE
-    ${Qt5Widgets_LIBRARIES}
-    ${Qt5Xml_LIBRARIES}
-    ${Qt5Concurrent_LIBRARIES}
-    mcap
-    plotjuggler_base )
+        ${Qt5Widgets_LIBRARIES}
+        ${Qt5Xml_LIBRARIES}
+        ${Qt5Concurrent_LIBRARIES}
+        plotjuggler_base
+        lz4::lz4_static
+        zstd::libzstd_static
+        mcap
+    )
 
 install(TARGETS DataLoadMCAP DESTINATION ${PJ_PLUGIN_INSTALL_DIRECTORY}  )

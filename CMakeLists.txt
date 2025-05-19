@@ -129,8 +129,13 @@ include_directories(
 
 include(FetchContent)
 include(cmake/CPM.cmake)
+include(cmake/find_or_download_dependencies.cmake)
+
+find_or_download_dependencies()
 
 add_subdirectory( 3rdparty )
+
+
 
 #########################  BASE library  ####################################
 
@@ -161,15 +166,15 @@ add_library(plotjuggler_base STATIC
     ${PLOTJUGGLER_BASE_MOCS}
 )
 
-target_link_libraries(plotjuggler_base PUBLIC
+target_link_libraries(plotjuggler_base
+PRIVATE
     plotjuggler_qwt
-    ${LUA_LIBRARY}
+    Lua::Lua
     sol2
 )
 
 target_include_directories(plotjuggler_base
     PUBLIC
-        $<BUILD_INTERFACE:${LUA_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plotjuggler_base/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plotjuggler_base/src>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qwt/src>

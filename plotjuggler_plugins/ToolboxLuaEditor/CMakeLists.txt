@@ -20,6 +20,7 @@ target_link_libraries(ToolboxLuaEditor
     plotjuggler_base
     plotjuggler_qwt
     QCodeEditor
+    Lua::Lua
     sol2
     )
 

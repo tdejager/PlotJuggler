@@ -125,6 +125,8 @@ target_link_libraries(plotjuggler
         plotjuggler_qwt
         QCodeEditor
         nlohmann_json
+        Lua::Lua
+        sol2
     )
 
 if(COMPILING_WITH_AMENT)
