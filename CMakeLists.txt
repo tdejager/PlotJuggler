@@ -27,11 +27,7 @@ IF (NOT WIN32 AND ENABLE_ASAN)
 endif()
 
 
-include_directories( plotjuggler_base/include )
-include_directories( plotjuggler_base/src )
-
 add_definitions( -DFMT_HEADER_ONLY )
-
 
 if(VCPKG_TOOLCHAIN)
     set(BUILDING_WITH_VCPKG ON)
@@ -101,7 +97,6 @@ set( QT_LINK_LIBRARIES
     Qt5::WebSockets
     )
 
-
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No build type selected, default to RelWithDebInfo")
     set(CMAKE_BUILD_TYPE "RelWithDebInfo")
@@ -128,11 +123,15 @@ include_directories(
     ${Qt5WebSockets_INCLUDE_DIRS}
     ${Qt5Svg_INCLUDE_DIRS}
     ${Qt5OpenGL_INCLUDE_DIRS}
-    ./3rdparty/color_widgets/include
-    ./3rdparty/Qt-Advanced-Docking/include
-    ./3rdparty/qwt/src
-    ./3rdparty/QCodeEditor/include
 )
+
+#########################  3rd party dependencies  #########################
+
+include(FetchContent)
+include(cmake/CPM.cmake)
+
+add_subdirectory( 3rdparty )
+
 
 #########################  BASE library  ####################################
 
@@ -165,14 +164,20 @@ add_library(plotjuggler_base STATIC
 
 target_link_libraries(plotjuggler_base PUBLIC
     plotjuggler_qwt
-    lua
+    ${LUA_LIBRARY}
     sol2
 )
 
-target_include_directories(plotjuggler_base INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:include>
+target_include_directories(plotjuggler_base
+    PUBLIC
+        ${LUA_INCLUDE_DIR}
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plotjuggler_base/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/plotjuggler_base/src>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qwt/src>
+
+        # $<INSTALL_INTERFACE:include>
 )
+
 
 #########################  INSTALL  ####################################
 
@@ -207,10 +212,6 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/plotjuggler.svg
 
 ######################## Main App, Libraries and Plugins ###################################
 
-include(FetchContent)
-include(cmake/CPM.cmake)
-
-add_subdirectory( 3rdparty )
 add_subdirectory( plotjuggler_app )
 add_subdirectory( plotjuggler_plugins)
 
@@ -218,7 +219,7 @@ add_subdirectory( plotjuggler_plugins)
 
 install(
      TARGETS
-        plotjuggler_base plotjuggler_qwt lua sol2
+        plotjuggler_base plotjuggler_qwt sol2
      EXPORT ${PROJECT_NAME}Targets
      LIBRARY DESTINATION lib
      ARCHIVE DESTINATION lib

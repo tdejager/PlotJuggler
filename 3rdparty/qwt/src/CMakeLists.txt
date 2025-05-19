@@ -1,6 +1,4 @@
 
-include_directories( ./  )
-
 set( QWT_SRC
     qwt.h
     qwt_abstract_scale_draw.h
@@ -193,11 +191,23 @@ set( QWT_SRC
 
 add_library(plotjuggler_qwt STATIC ${QWT_SRC})
 
+target_include_directories(plotjuggler_qwt PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    ${Qt5Core_INCLUDE_DIRS}
+    ${Qt5Widgets_INCLUDE_DIRS}
+    ${Qt5Concurrent_INCLUDE_DIRS}
+    ${Qt5Svg_INCLUDE_DIRS}
+    ${Qt5OpenGL_INCLUDE_DIRS}
+)
+
 target_link_libraries(plotjuggler_qwt
-    ${Qt5Widgets_LIBRARIES}
-    ${Qt5Concurrent_LIBRARIES}
-    ${Qt5Svg_LIBRARIES}
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Widgets
+    Qt5::Concurrent
+    Qt5::Svg
     )
+
 target_compile_definitions(plotjuggler_qwt PUBLIC QWT_MOC_INCLUDE)
 #target_compile_definitions(plotjuggler_qwt PUBLIC QWT_DLL QWT_MAKEDLL )
 
@@ -207,7 +217,7 @@ target_compile_definitions(plotjuggler_qwt_objects PUBLIC QWT_MOC_INCLUDE)
 #install(
 #    TARGETS plotjuggler_qwt
 #    EXPORT export_plotjuggler_qwt)
-
+#    LIBRARY DESTINATION lib
 install(
      TARGETS
         plotjuggler_qwt
