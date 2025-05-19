@@ -29,17 +29,11 @@ endif()
 
 ##### nlohmann_json ######
 
-find_package(nlohmann_json QUIET)
-
-if (nlohmann_json_FOUND)
-    message(STATUS "Found nlohmann_json")
-elseif(NOT TARGET nlohmann_json)
-    CPMAddPackage("gh:nlohmann/json@3.11.3")
-endif()
+CPMAddPackage("gh:nlohmann/json@3.11.3")
 
 ##### Lua + Sol2 ######
 
-find_package(Lua QUIET)
+# find_package(Lua QUIET)
 
 if(LUA_FOUND)
     message(STATUS "Found lua")
@@ -66,7 +60,7 @@ elseif (NOT TARGET lua)
             RUNTIME DESTINATION bin
             INCLUDES DESTINATION include)
 
-        set(LUA_LIBRARY lua CACHE PATH "Lua libraty" FORCE)
+        set(LUA_LIBRARY lua CACHE STRING "Lua library" FORCE)
         set(LUA_INCLUDE_DIR "${lua_SOURCE_DIR}" CACHE PATH "Lua include directory" FORCE)
     endif()
 endif()
