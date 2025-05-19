@@ -64,9 +64,11 @@ elseif (NOT TARGET lua)
             ARCHIVE DESTINATION lib
             RUNTIME DESTINATION bin
             INCLUDES DESTINATION include)
+
+        set(LUA_INCLUDE_DIR "${lua_SOURCE_DIR}")
+        message(STATUS "LUA_INCLUDE_DIR: ${LUA_INCLUDE_DIR}")
+        set(LUA_LIBRARY lua)
     endif()
-    set(LUA_INCLUDE_DIR "${lua_SOURCE_DIR}")
-    set(LUA_LIBRARY lua)
 endif()
 
 
