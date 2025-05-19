@@ -123,7 +123,7 @@ function(find_or_download_dependencies)
 
         add_subdirectory(${zstd_SOURCE_DIR}/build/cmake ${zstd_BINARY_DIR})
         set(ZSTD_INCLUDE_DIR ${zstd_SOURCE_DIR}/lib)
-        set(ZSTD_LIBRARY zstd_static)
+        set(ZSTD_LIBRARY libzstd_static)
     endif()
 
     add_library(zstd::libzstd_static INTERFACE IMPORTED)
