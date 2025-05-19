@@ -193,11 +193,6 @@ add_library(plotjuggler_qwt STATIC ${QWT_SRC})
 
 target_include_directories(plotjuggler_qwt PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    ${Qt5Core_INCLUDE_DIRS}
-    ${Qt5Widgets_INCLUDE_DIRS}
-    ${Qt5Concurrent_INCLUDE_DIRS}
-    ${Qt5Svg_INCLUDE_DIRS}
-    ${Qt5OpenGL_INCLUDE_DIRS}
 )
 
 target_link_libraries(plotjuggler_qwt
@@ -214,10 +209,6 @@ target_compile_definitions(plotjuggler_qwt PUBLIC QWT_MOC_INCLUDE)
 add_library(plotjuggler_qwt_objects OBJECT ${QWT_SRC})
 target_compile_definitions(plotjuggler_qwt_objects PUBLIC QWT_MOC_INCLUDE)
 
-#install(
-#    TARGETS plotjuggler_qwt
-#    EXPORT export_plotjuggler_qwt)
-#    LIBRARY DESTINATION lib
 install(
      TARGETS
         plotjuggler_qwt
