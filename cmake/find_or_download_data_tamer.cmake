@@ -1,6 +1,16 @@
 function(find_or_download_data_tamer)
 
-  if(NOT TARGET data_tamer_parser)
+  find_package(data_tamer_cpp QUIET)
+
+  if(data_tamer_cpp_FOUND)
+    message(STATUS "data_tamer found")
+    add_library(data_tamer_parser INTERFACE)
+    target_include_directories(data_tamer_parser
+                               INTERFACE "${data_tamer_cpp_INCLUDE_DIRS}")
+    add_library(data_tamer::parser ALIAS data_tamer_parser)
+
+  elseif(NOT TARGET data_tamer_parser AND NOT TARGET data_tamer::parser)
+
     message(STATUS "data_tamer not found, downloading")
     cpmaddpackage(
       NAME data_tamer URL
