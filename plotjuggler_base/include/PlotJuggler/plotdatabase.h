@@ -125,12 +125,12 @@ template <typename TypeX, typename Value>
 class PlotDataBase
 {
   template <typename T>
-  static bool is_equal(const T& a, const T& b) const
+  static bool is_equal(const T& a, const T& b)
   {
     if constexpr (std::is_floating_point_v<T>)
     {
       const auto eps = std::numeric_limits<T>::epsilon();
-      return std::abs(a - b) <= (eps * std::max({ T(1), std::abs(a), std::abs(b) })));
+      return std::abs(a - b) <= (eps * std::max({ T(1), std::abs(a), std::abs(b) }));
     }
     else
     {
