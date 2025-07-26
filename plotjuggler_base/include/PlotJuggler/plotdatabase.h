@@ -124,6 +124,20 @@ private:
 template <typename TypeX, typename Value>
 class PlotDataBase
 {
+  template <typename T>
+  static bool is_equal(const T& a, const T& b) const
+  {
+    if constexpr (std::is_floating_point_v<T>)
+    {
+      const auto eps = std::numeric_limits<T>::epsilon();
+      return std::abs(a - b) <= (eps * std::max({ T(1), std::abs(a), std::abs(b) })));
+    }
+    else
+    {
+      return a == b;  // Assuming StringRef has an equality operator
+    }
+  }
+
 public:
   struct Point
   {
@@ -429,7 +443,7 @@ public:
     {
       if constexpr (std::is_arithmetic_v<Value> || std::is_same_v<Value, StringRef>)
       {
-        if (!(p.y == *_const_y_value))
+        if (!is_equal(p.y, *_const_y_value))
         {
           // Transition to variable mode
           transitionToVariableMode();
@@ -613,7 +627,7 @@ public:
       // Check if still constant (only for types that support equality comparison)
       if constexpr (std::is_arithmetic_v<Value> || std::is_same_v<Value, StringRef>)
       {
-        if (!(p.y == *_const_y_value))
+        if (!is_equal(p.y, *_const_y_value))
         {
           // Transition to variable mode
           transitionToVariableMode();
@@ -667,7 +681,7 @@ public:
     {
       if constexpr (std::is_arithmetic_v<Value> || std::is_same_v<Value, StringRef>)
       {
-        if (!(p.y == *_const_y_value))
+        if (!is_equal(p.y, *_const_y_value))
         {
           // Transition to variable mode
           transitionToVariableMode();
@@ -696,8 +710,8 @@ public:
   {
     if constexpr (std::is_arithmetic_v<TypeX>)
     {
-      if (!_range_x_dirty &&
-          (_x_data.front() == _range_x.max || _x_data.front() == _range_x.min))
+      if (!_range_x_dirty && (is_equal(_x_data.front(), _range_x.max) ||
+                              is_equal(_x_data.front(), _range_x.min)))
       {
         _range_x_dirty = true;
       }
@@ -706,7 +720,8 @@ public:
     if constexpr (std::is_arithmetic_v<Value>)
     {
       if (!_const_y_value.has_value() && !_range_y_dirty &&
-          (_y_data.front() == _range_y.max || _y_data.front() == _range_y.min))
+          (is_equal(_y_data.front(), _range_y.max) ||
+           is_equal(_y_data.front(), _range_y.min)))
       {
         _range_y_dirty = true;
       }
