@@ -674,7 +674,6 @@ public:
 
     size_t index = it - begin();
     auto x_it = _x_data.begin() + index;
-    _x_data.insert(x_it, std::move(p.x));
 
     // Handle Y coordinate based on current mode
     if (_const_y_value.has_value())
@@ -686,6 +685,7 @@ public:
           // Transition to variable mode
           transitionToVariableMode();
           auto y_it = _y_data.begin() + index;
+          _x_data.insert(x_it, std::move(p.x));
           _y_data.insert(y_it, std::move(p.y));
         }
         // If p.y == *_const_y_value, stay in constant mode, no Y insertion needed
@@ -695,6 +695,7 @@ public:
         // For types without reliable equality, always transition to variable mode
         transitionToVariableMode();
         auto y_it = _y_data.begin() + index;
+        _x_data.insert(x_it, std::move(p.x));
         _y_data.insert(y_it, std::move(p.y));
       }
     }
@@ -702,6 +703,7 @@ public:
     {
       // Already in variable mode
       auto y_it = _y_data.begin() + index;
+      _x_data.insert(x_it, std::move(p.x));
       _y_data.insert(y_it, std::move(p.y));
     }
   }
@@ -794,7 +796,8 @@ protected:
     }
 
     // Populate _y_data with the constant value for all existing points
-    _y_data.assign(_x_data.size(), *_const_y_value);
+    _y_data.clear();
+    _y_data.resize(_x_data.size(), *_const_y_value);
     _const_y_value.reset();
   }
 
