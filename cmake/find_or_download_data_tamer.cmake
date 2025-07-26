@@ -3,8 +3,8 @@ function(find_or_download_data_tamer)
   find_package(data_tamer_cpp QUIET)
 
   if(data_tamer_cpp_FOUND)
-    message(STATUS "data_tamer found")
-    add_library(data_tamer::parser ALIAS data_tamer_cpp)
+    message(STATUS "Found data_tamer in system")
+    add_library(data_tamer::parser ALIAS ${data_tamer_cpp_TARGETS})
 
   elseif(NOT TARGET data_tamer_parser AND NOT TARGET data_tamer::parser)
 
