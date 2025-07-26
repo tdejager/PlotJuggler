@@ -4,10 +4,7 @@ function(find_or_download_data_tamer)
 
   if(data_tamer_cpp_FOUND)
     message(STATUS "data_tamer found")
-    add_library(data_tamer_parser INTERFACE)
-    target_include_directories(data_tamer_parser
-                               INTERFACE "${data_tamer_cpp_INCLUDE_DIRS}")
-    add_library(data_tamer::parser ALIAS data_tamer_parser)
+    add_library(data_tamer::parser ALIAS data_tamer_cpp)
 
   elseif(NOT TARGET data_tamer_parser AND NOT TARGET data_tamer::parser)
 
