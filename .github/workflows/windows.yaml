@@ -59,14 +59,14 @@ jobs:
       - name: Build Plotjuggler
         shell: pwsh
         run: |
-          cmake --preset conan-default -B build -DBUILDING_WITH_CONAN=ON -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=Release .
-          cmake --build build --config Release --target install --parallel
+          cmake --preset conan-default -B build -DBUILDING_WITH_CONAN=ON -DCMAKE_BUILD_TYPE=Release -S .
+          cmake --build build --config Release --parallel
 
       - name: Prepare installer directory
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path installer\io.plotjuggler.application\data
-          Copy-Item -Path install\bin\*.* -Destination installer\io.plotjuggler.application\data -Recurse -Force
+          Copy-Item -Path build\bin\*.* -Destination installer\io.plotjuggler.application\data -Recurse -Force
           windeployqt.exe --release installer\io.plotjuggler.application\data\plotjuggler.exe
 
       - name: Create installer using QT Installation Framework

@@ -23,7 +23,7 @@ else()
       GITHUB_REPOSITORY
       foxglove/mcap
       GIT_TAG
-      releases/cpp/v1.3.0
+      releases/cpp/v1.4.1
       DOWNLOAD_ONLY
       YES)
     # mcap has no CMake support, so we create our own target
