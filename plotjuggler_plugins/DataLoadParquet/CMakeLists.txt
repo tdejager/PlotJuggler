@@ -1,6 +1,6 @@
 find_package(Arrow QUIET CONFIG)
 
-if(Arrow_FOUND)
+if(TARGET Parquet::parquet_static)
 
   message(STATUS "[Arrow] found")
 

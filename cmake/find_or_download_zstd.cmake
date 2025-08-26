@@ -5,11 +5,12 @@ function(find_or_download_zstd)
   if(ZSTD_FOUND)
     message(STATUS "Found ZSTD in system")
 
-    if(NOT TARGET zstd::zstd)
-      add_library(zstd::zstd INTERFACE IMPORTED)
-      set_target_properties(zstd::zstd PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
-                                                  "${ZSTD_INCLUDE_DIR}")
-      target_link_libraries(zstd::zstd INTERFACE ${ZSTD_LIBRARY})
+    if(NOT TARGET zstd::libzstd_static)
+      add_library(zstd::libzstd_static INTERFACE IMPORTED)
+      set_target_properties(
+        zstd::libzstd_static PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
+                                        "${ZSTD_INCLUDE_DIR}")
+      target_link_libraries(zstd::libzstd_static INTERFACE ${ZSTD_LIBRARY})
     endif()
 
   elseif(NOT TARGET libzstd_static)
@@ -64,13 +65,14 @@ function(find_or_download_zstd)
     add_subdirectory(${zstd_SOURCE_DIR}/build/cmake ${zstd_BINARY_DIR})
     set(ZSTD_FOUND TRUE)
 
-    add_library(zstd::zstd INTERFACE IMPORTED)
+    add_library(zstd::libzstd_static INTERFACE IMPORTED)
     set_target_properties(
-      zstd::zstd PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${zstd_SOURCE_DIR}/lib
-                            INTERFACE_LINK_LIBRARIES libzstd_static)
+      zstd::libzstd_static
+      PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${zstd_SOURCE_DIR}/lib
+                 INTERFACE_LINK_LIBRARIES libzstd_static)
   endif()
 
-  if(NOT TARGET zstd::zstd)
+  if(NOT TARGET zstd::libzstd_static)
     message(FATAL_ERROR "ZSTD not found, please install ZSTD or download it")
   endif()
 
