@@ -30,9 +30,9 @@ else()
     add_library(mcap_static STATIC mcap.cpp)
     target_include_directories(
       mcap_static PUBLIC $<BUILD_INTERFACE:${mcap_SOURCE_DIR}/cpp/mcap/include>)
-    target_link_libraries(mcap_static lz4::lz4_static zstd::libzstd_static)
+    target_link_libraries(mcap_static LZ4::lz4_static zstd::libzstd_static)
 
-    set(MCAP_DEP mcap_static lz4::lz4_static zstd::libzstd_static)
+    set(MCAP_DEP mcap_static LZ4::lz4_static zstd::libzstd_static)
   endif()
 endif()
 

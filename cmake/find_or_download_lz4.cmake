@@ -5,15 +5,15 @@ function(find_or_download_lz4)
   if(LZ4_FOUND)
     message(STATUS "Found LZ4 in system")
 
-    if(NOT TARGET lz4::lz4_static)
-      add_library(lz4::lz4_static INTERFACE IMPORTED)
+    if(NOT TARGET LZ4::lz4_static)
+      add_library(LZ4::lz4_static INTERFACE IMPORTED)
       set_target_properties(
-        lz4::lz4_static PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
+        LZ4::lz4_static PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
                                    "${LZ4_INCLUDE_DIR}")
-      target_link_libraries(lz4::lz4_static INTERFACE ${LZ4_LIBRARY})
+      target_link_libraries(LZ4::lz4_static INTERFACE ${LZ4_LIBRARY})
     endif()
 
-  elseif(NOT TARGET lz4_static)
+  elseif(NOT TARGET LZ4::lz4_static)
     # lz4 ###
     cpmaddpackage(
       NAME lz4 URL https://github.com/lz4/lz4/archive/refs/tags/v1.10.0.zip
@@ -24,16 +24,16 @@ function(find_or_download_lz4)
 
     set(LZ4_FOUND TRUE)
 
-    add_library(lz4::lz4_static INTERFACE IMPORTED)
+    add_library(LZ4::lz4_static INTERFACE IMPORTED)
 
     set_target_properties(
-      lz4::lz4_static
+      LZ4::lz4_static
       PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${lz4_SOURCE_DIR}/lib
                  INTERFACE_LINK_LIBRARIES lz4_static)
 
   endif()
 
-  if(NOT TARGET lz4::lz4_static)
+  if(NOT TARGET LZ4::lz4_static)
     message(FATAL_ERROR "LZ4 not found, please install LZ4 or download it")
   endif()
 
