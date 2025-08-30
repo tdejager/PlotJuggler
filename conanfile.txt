@@ -1,5 +1,4 @@
  [requires]
- protobuf/3.21.12
  mosquitto/2.0.18
  fmt/11.2.0
  zeromq/4.3.5
@@ -15,7 +14,12 @@
  arrow/*:with_snappy=True
  arrow/*:with_zlib=True
  arrow/*:with_zstd=True
+ arrow/*:with_protobuf=True
 
  [generators]
  CMakeDeps
  CMakeToolchain
+
+ [tool_requires]
+ cmake/3.31.8
+ 
