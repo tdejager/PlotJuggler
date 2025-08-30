@@ -4,6 +4,8 @@
  fmt/11.2.0
  zeromq/4.3.5
  arrow/21.0.0
+ lz4/1.9.4
+ zstd/1.5.7
 
  [options]
  zeromq*:shared=False

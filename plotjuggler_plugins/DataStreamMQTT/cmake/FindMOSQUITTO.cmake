@@ -21,12 +21,4 @@ message(STATUS "libmosquitto include dir: ${MOSQUITTO_INCLUDE_DIR}")
 message(STATUS "libmosquitto: ${MOSQUITTO_LIBRARY}")
 set(MOSQUITTO_LIBRARIES ${MOSQUITTO_LIBRARY})
 
-add_library(mosquitto::mosquitto INTERFACE IMPORTED)
-set_target_properties(
-    mosquitto::mosquitto
-  PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${MOSQUITTO_INCLUDE_DIR}"
-    INTERFACE_LINK_LIBRARIES ${MOSQUITTO_LIBRARIES}
-  )
-
 mark_as_advanced(MOSQUITTO_INCLUDE_DIR MOSQUITTO_LIBRARY)

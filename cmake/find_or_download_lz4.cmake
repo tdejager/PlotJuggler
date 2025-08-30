@@ -1,6 +1,12 @@
 function(find_or_download_lz4)
 
-  find_package(LZ4 QUIET)
+  # default to conan
+  find_package(lz4 REQUIRED CONFIG)
+
+  if(NOT LZ4_FOUND)
+    # use our FindLZ4.cmake
+    find_package(LZ4 QUIET)
+  endif()
 
   if(LZ4_FOUND)
     message(STATUS "Found LZ4 in system")

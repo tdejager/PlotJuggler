@@ -30,9 +30,13 @@ else()
     # mcap has no CMake support, so we create our own target
 
     add_library(mcap_static STATIC mcap.cpp)
-    target_include_directories(
-      mcap_static PUBLIC $<BUILD_INTERFACE:${mcap_SOURCE_DIR}/cpp/mcap/include>)
-    target_link_libraries(mcap_static PUBLIC LZ4::lz4_static zstd::libzstd_static)
+
+    target_include_directories(mcap_static PUBLIC
+       $<BUILD_INTERFACE:${mcap_SOURCE_DIR}/cpp/mcap/include>
+    )
+
+    target_link_libraries(mcap_static PUBLIC
+        LZ4::lz4_static zstd::libzstd_static)
 
     set(MCAP_DEPS mcap_static)
   endif()
