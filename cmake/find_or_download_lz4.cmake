@@ -9,7 +9,7 @@ function(find_or_download_lz4)
       add_library(LZ4::lz4_static INTERFACE IMPORTED)
       set_target_properties(
         LZ4::lz4_static PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
-                                   "${LZ4_INCLUDE_DIR} "${LZ4_INCLUDE_DIRS}")
+                                   "${LZ4_INCLUDE_DIR} ${LZ4_INCLUDE_DIRS}")
       target_link_libraries(LZ4::lz4_static INTERFACE ${LZ4_LIBRARY})
     endif()
 
