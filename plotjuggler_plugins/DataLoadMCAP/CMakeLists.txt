@@ -6,8 +6,14 @@ if(COMPILING_WITH_AMENT)
   find_package(mcap_vendor REQUIRED)
   set(MCAP_DEPS mcap_vendor::mcap)
 else()
-  message(STATUS "mcap_vendor not found. Will be downloaded with CPM.")
-  if(NOT TARGET mcap::mcap AND NOT TARGET mcap_lib)
+
+  find_package(mcap QUIET CONFIG)
+
+  if(mcap_FOUND)
+    message(STATUS "mcap found (conan?)")
+    set(MCAP_DEPS mcap::mcap)
+
+  elseif(NOT TARGET mcap::mcap AND NOT TARGET mcap_static)
 
     include(${PROJECT_SOURCE_DIR}/cmake/find_or_download_lz4.cmake)
     find_or_download_lz4()

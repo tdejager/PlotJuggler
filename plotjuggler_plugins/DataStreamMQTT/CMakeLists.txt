@@ -1,3 +1,4 @@
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 find_package(MOSQUITTO QUIET)
 
@@ -17,14 +18,7 @@ if(MOSQUITTO_FOUND)
 
   target_compile_definitions(DataStreamMQTT_Mosquitto PRIVATE QT_PLUGIN)
 
-  if(BUILDING_WITH_CONAN)
-    target_link_libraries(DataStreamMQTT_Mosquitto PRIVATE mosquitto::mosquitto)
-  else()
-    target_link_libraries(DataStreamMQTT_Mosquitto
-                          PRIVATE ${MOSQUITTO_LIBRARIES})
-    target_include_directories(DataStreamMQTT_Mosquitto
-                               PUBLIC ${MOSQUITTO_INCLUDE_DIR})
-  endif()
+  target_link_libraries(DataStreamMQTT_Mosquitto PRIVATE mosquitto::mosquitto)
 
   install(TARGETS DataStreamMQTT_Mosquitto
           DESTINATION ${PJ_PLUGIN_INSTALL_DIRECTORY})
