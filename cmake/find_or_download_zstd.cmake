@@ -3,27 +3,13 @@ function(find_or_download_zstd)
   # this should default to conan
   find_package(zstd QUIET CONFIG)
 
-  if(NOT ZSTD_FOUND)
-    # use our FindZSTD.cmake to find it in the system
-    find_package(ZSTD QUIET)
-  endif()
-
-  if(ZSTD_FOUND)
-    message(STATUS "Found ZSTD in system")
-
-    if(NOT TARGET zstd::libzstd_static)
-        add_library(zstd::libzstd_static INTERFACE IMPORTED)
-        set_target_properties(zstd::libzstd_static PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES ${zstd_SOURCE_DIR}/lib
-            INTERFACE_LINK_LIBRARIES libzstd_static)
-    endif()
-  endif()
-
-  if(NOT TARGET zstd::libzstd_static)
+  if(TARGET zstd::libzstd_static)
+    message(STATUS "Found ZSTD in system (conan?)")
+  else()
     # zstd ###
     cpmaddpackage(
-      NAME zstd URL
-      https://github.com/facebook/zstd/archive/refs/tags/v1.5.7.zip
+      NAME zstd
+      URL https://github.com/facebook/zstd/archive/refs/tags/v1.5.7.zip
       DOWNLOAD_ONLY YES)
 
     set(ZSTD_BUILD_STATIC ON CACHE BOOL " " FORCE)

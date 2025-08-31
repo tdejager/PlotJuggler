@@ -48,13 +48,9 @@ if(catkin_FOUND)
   find_package(catkin REQUIRED COMPONENTS roslib roscpp)
 
   catkin_package(
-    INCLUDE_DIRS
-    plotjuggler_base/include
-    LIBRARIES
-    plotjuggler_base
-    CATKIN_DEPENDS
-    roslib
-    roscpp)
+    INCLUDE_DIRS plotjuggler_base/include
+    LIBRARIES plotjuggler_base
+    CATKIN_DEPENDS roslib roscpp)
 
   message(STATUS ${catkin_INCLUDE_DIRS})
 
