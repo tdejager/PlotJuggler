@@ -1,10 +1,10 @@
 function(find_or_download_zstd)
 
-  # default to conan
-  find_package(zstd  REQUIRED CONFIG)
+  # this should default to conan
+  find_package(zstd QUIET CONFIG)
 
   if(NOT ZSTD_FOUND)
-    # use our FindZSTD.cmake
+    # use our FindZSTD.cmake to find it in the system
     find_package(ZSTD QUIET)
   endif()
 
