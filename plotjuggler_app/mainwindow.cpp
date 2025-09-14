@@ -135,18 +135,6 @@ MainWindow::MainWindow(const QCommandLineParser& commandline_parser, QWidget* pa
 
   QSettings settings;
 
-  ui->playbackLoop->setText("");
-  ui->buttonZoomOut->setText("");
-  ui->buttonPlay->setText("");
-  ui->buttonUseDateTime->setText("");
-  ui->buttonActivateGrid->setText("");
-  ui->buttonRatio->setText("");
-  ui->buttonLink->setText("");
-  ui->buttonTimeTracker->setText("");
-  ui->buttonLoadDatafile->setText("");
-  ui->buttonRemoveTimeOffset->setText("");
-  ui->buttonLegend->setText("");
-
   ui->widgetStatusBar->setHidden(true);
 
   if (commandline_parser.isSet("buffer_size"))
@@ -221,15 +209,12 @@ MainWindow::MainWindow(const QCommandLineParser& commandline_parser, QWidget* pa
   connect(this, &MainWindow::stylesheetChanged, _main_tabbed_widget,
           &TabbedPlotWidget::on_stylesheetChanged);
 
-  ui->plottingLayout->insertWidget(0, _main_tabbed_widget, 1);
+  ui->tabsFrame->layout()->addWidget(_main_tabbed_widget);
   ui->leftLayout->addWidget(_curvelist_widget, 1);
 
   ui->mainSplitter->setCollapsible(0, true);
   ui->mainSplitter->setStretchFactor(0, 2);
   ui->mainSplitter->setStretchFactor(1, 6);
-
-  ui->layoutTimescale->removeWidget(ui->widgetButtons);
-  _main_tabbed_widget->tabWidget()->setCornerWidget(ui->widgetButtons);
 
   connect(ui->mainSplitter, SIGNAL(splitterMoved(int, int)),
           SLOT(on_splitterMoved(int, int)));
@@ -983,6 +968,7 @@ void MainWindow::onPlotAdded(PlotWidget* plot)
   plot->enableTracker(!isStreamingActive());
   plot->setKeepRatioXY(ui->buttonRatio->isChecked());
   plot->configureTracker(_tracker_param);
+  plot->onShowPlot(ui->buttonShowpoint->isChecked());
 }
 
 void MainWindow::onPlotZoomChanged(PlotWidget* modified_plot, QRectF new_range)
@@ -1899,6 +1885,7 @@ void MainWindow::on_stylesheetChanged(QString theme)
   ui->buttonUseDateTime->setIcon(LoadSvg(":/resources/svg/datetime.svg", theme));
   ui->buttonActivateGrid->setIcon(LoadSvg(":/resources/svg/grid.svg", theme));
   ui->buttonRatio->setIcon(LoadSvg(":/resources/svg/ratio.svg", theme));
+  ui->buttonShowpoint->setIcon(LoadSvg(":/resources/svg/show_point.svg", theme));
 
   ui->buttonLoadLayout->setIcon(LoadSvg(":/resources/svg/import.svg", theme));
   ui->buttonSaveLayout->setIcon(LoadSvg(":/resources/svg/export.svg", theme));
@@ -1906,6 +1893,7 @@ void MainWindow::on_stylesheetChanged(QString theme)
   ui->buttonLink->setIcon(LoadSvg(":/resources/svg/link.svg", theme));
   ui->buttonRemoveTimeOffset->setIcon(LoadSvg(":/resources/svg/t0.svg", theme));
   ui->buttonLegend->setIcon(LoadSvg(":/resources/svg/legend.svg", theme));
+  ui->buttonReferencePoint->setIcon(LoadSvg(":/resources/svg/reference_line.svg", theme));
 
   ui->buttonStreamingOptions->setIcon(LoadSvg(":/resources/svg/settings_cog.svg", theme));
 }
@@ -3544,3 +3532,19 @@ void MainWindow::on_buttonCloseStatus_clicked()
 {
   ui->widgetStatusBar->hide();
 }
+
+void MainWindow::on_buttonReferencePoint_toggled(bool checked)
+{
+  this->forEachWidget([checked](PlotWidget* plot) {
+    plot->onReferenceLineChecked(checked);
+  });
+}
+
+
+void MainWindow::on_buttonShowpoint_toggled(bool checked)
+{
+  this->forEachWidget([checked](PlotWidget* plot) {
+    plot->onShowPlot(checked);
+  });
+}
+
