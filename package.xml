@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
     <name>plotjuggler</name>
-    <version>3.10.10</version>
+    <version>3.11.1</version>
     <description>PlotJuggler: juggle with data</description>
 
     <maintainer email="davide.faconti@gmail.com">Davide Faconti</maintainer>
@@ -20,6 +20,7 @@
     <depend  condition="$ROS_VERSION == 2">ament_index_cpp</depend>
     <depend  condition="$ROS_VERSION == 2">rclcpp</depend>
     <depend  condition="$ROS_VERSION == 2">fastcdr</depend>
+    <depend  condition="$ROS_VERSION == 2">data_tamer_cpp</depend>
 
     <!-- Qt dependencies -->
     <depend>qtbase5-dev</depend>

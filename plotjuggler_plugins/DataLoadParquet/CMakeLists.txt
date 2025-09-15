@@ -1,8 +1,14 @@
-find_package(Arrow QUIET)
-find_package(Parquet QUIET)
+find_package(Arrow QUIET CONFIG)
 
-if(Arrow_FOUND)
-  message(STATUS "[Parquet] found")
+# when using conan, Parquet::parquet_static is found, otherwise
+# we need to do find_package(Parquet)
+if(NOT TARGET Parquet::parquet_static)
+  find_package(Parquet QUIET)
+endif()
+
+if(TARGET Parquet::parquet_static)
+
+  message(STATUS "[Arrow/Parquet] found")
 
   qt5_wrap_ui(UI_SRC dataload_parquet.ui)
 
