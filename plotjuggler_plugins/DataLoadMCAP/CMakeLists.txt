@@ -25,7 +25,7 @@ else()
     cpmaddpackage(
       NAME mcap
       GITHUB_REPOSITORY foxglove/mcap
-      GIT_TAG releases/cpp/v1.4.1
+      GIT_TAG releases/cpp/v2.0.2
       DOWNLOAD_ONLY YES)
     # mcap has no CMake support, so we create our own target
 
