@@ -26,6 +26,8 @@
 #include "rosx_introspection/ros_parser.hpp"
 #include "rosx_introspection/deserializer.hpp"
 
+#ifdef ROSX_JSON_PARSER
+
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
@@ -33,6 +35,7 @@
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/memorystream.h"
 
+#endif
 namespace RosMsgParser
 {
 inline bool operator==(const std::string& a, const std::string_view& b)
@@ -248,6 +251,8 @@ bool Parser::deserialize(Span<const uint8_t> buffer, FlatMessage* flat_container
 
   return entire_message_parse;
 }
+
+#ifdef ROSX_JSON_PARSER
 
 bool Parser::deserializeIntoJson(Span<const uint8_t> buffer, std::string* json_txt,
                                  Deserializer* deserializer, int indent,
@@ -603,5 +608,6 @@ bool Parser::serializeFromJson(const std::string_view json_string,
 
   return true;
 }
+#endif
 
 }  // namespace RosMsgParser

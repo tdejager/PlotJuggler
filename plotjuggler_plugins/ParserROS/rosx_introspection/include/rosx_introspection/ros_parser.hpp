@@ -30,7 +30,6 @@
 
 namespace RosMsgParser
 {
-
 struct FlatMessage
 {
   std::shared_ptr<MessageSchema> schema;
@@ -143,12 +142,15 @@ public:
   bool deserialize(Span<const uint8_t> buffer, FlatMessage* flat_output,
                    Deserializer* deserializer) const;
 
+#ifdef ROSX_JSON_PARSER
+
   bool deserializeIntoJson(Span<const uint8_t> buffer, std::string* json_txt,
                            Deserializer* deserializer, int indent = 0,
                            bool ignore_constants = false) const;
 
   bool serializeFromJson(const std::string_view json_string,
                          Serializer* serializer) const;
+#endif
 
   typedef std::function<void(const ROSType&, Span<uint8_t>&)> VisitingCallback;
 
