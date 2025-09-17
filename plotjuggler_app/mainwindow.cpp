@@ -211,9 +211,6 @@ MainWindow::MainWindow(const QCommandLineParser& commandline_parser, QWidget* pa
   ui->mainSplitter->setStretchFactor(0, 2);
   ui->mainSplitter->setStretchFactor(1, 6);
 
-  ui->layoutTimescale->removeWidget(ui->widgetButtons);
-  _main_tabbed_widget->tabWidget()->setCornerWidget(ui->widgetButtons);
-
   connect(ui->mainSplitter, SIGNAL(splitterMoved(int, int)), SLOT(on_splitterMoved(int, int)));
 
   initializeActions();
@@ -3491,16 +3488,10 @@ void MainWindow::on_buttonCloseStatus_clicked()
 
 void MainWindow::on_buttonReferencePoint_toggled(bool checked)
 {
-  this->forEachWidget([checked](PlotWidget* plot) {
-    plot->onReferenceLineChecked(checked);
-  });
+  this->forEachWidget([checked](PlotWidget* plot) { plot->onReferenceLineChecked(checked); });
 }
-
 
 void MainWindow::on_buttonShowpoint_toggled(bool checked)
 {
-  this->forEachWidget([checked](PlotWidget* plot) {
-    plot->onShowPlot(checked);
-  });
+  this->forEachWidget([checked](PlotWidget* plot) { plot->onShowPlot(checked); });
 }
-
