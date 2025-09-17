@@ -173,14 +173,14 @@ void CurveTracker::setPosition(const QPointF& tracker_position)
     _marker[i]->setValue(point);
   }
 
-  // add indentation to aligne the columns
-  for (auto& [_, parts]: text_lines)
+  // add indentation to align the columns
+  for (auto& [_, parts] : text_lines)
   {
-    while(parts.value.length() < values_char_count)
+    while (parts.value.length() < values_char_count)
     {
       parts.value.prepend("&nbsp;");
     }
-    while(parts.delta.length() < delta_char_count)
+    while (parts.delta.length() < delta_char_count)
     {
       parts.delta.prepend("&nbsp;");
     }
@@ -190,12 +190,14 @@ void CurveTracker::setPosition(const QPointF& tracker_position)
   QString text_marker_info;
 
   const QString time_str = QString::number(tracker_position.x(), 'f', prec);
-  if(_reference_pos)
+  if (_reference_pos)
   {
     auto delta_time = tracker_position.x() - _reference_pos->x();
     auto delta_str = QString::number(delta_time, 'f', prec);
     text_marker_info = QString("time : %1 (Δ %2)<br>").arg(time_str).arg(delta_str);
-  } else {
+  }
+  else
+  {
     text_marker_info = QString("time : %1<br>").arg(time_str);
   }
 

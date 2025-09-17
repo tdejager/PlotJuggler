@@ -120,8 +120,7 @@ PlotWidget::PlotWidget(PlotDataMapRef& datamap, QWidget* parent)
   _reference_line_marker->attach(qwtPlot());
   _reference_line_marker->setVisible(false);
 
-  QwtSymbol* sym =
-      new QwtSymbol(QwtSymbol::Ellipse, Qt::black, QPen(Qt::black), QSize(5, 5));
+  QwtSymbol* sym = new QwtSymbol(QwtSymbol::Ellipse, Qt::black, QPen(Qt::black), QSize(5, 5));
 
   _show_point_marker = (new QwtPlotMarker);
   _show_point_marker->attach(qwtPlot());
@@ -1518,20 +1517,19 @@ void PlotWidget::on_pasteAction_triggered()
 
 void PlotWidget::showPointValues(QPoint point)
 {
-  if(!_show_point_enabled) {
+  if (!_show_point_enabled)
+  {
     return;
   }
   const QwtPlotItemList curves = qwtPlot()->itemList(QwtPlotItem::Rtti_PlotCurve);
 
-  auto paint_to_plot =[this](QPoint p)
-  {
-    return QPointF (qwtPlot()->invTransform(QwtPlot::xBottom, p.x()),
-                    qwtPlot()->invTransform(QwtPlot::yLeft, p.y()));
+  auto paint_to_plot = [this](QPoint p) {
+    return QPointF(qwtPlot()->invTransform(QwtPlot::xBottom, p.x()),
+                   qwtPlot()->invTransform(QwtPlot::yLeft, p.y()));
   };
-  auto plot_to_paint =[this](QPointF p)
-  {
-    return QPoint (qwtPlot()->transform(QwtPlot::xBottom, p.x()),
-                   qwtPlot()->transform(QwtPlot::yLeft, p.y()));
+  auto plot_to_paint = [this](QPointF p) {
+    return QPoint(qwtPlot()->transform(QwtPlot::xBottom, p.x()),
+                  qwtPlot()->transform(QwtPlot::yLeft, p.y()));
   };
 
   const QPointF pointF = paint_to_plot(point);
@@ -1540,20 +1538,20 @@ void PlotWidget::showPointValues(QPoint point)
   const int prec = settings.value("Preferences::precision", 3).toInt();
 
   QString text;
-  int min_distance_sqr = 40*40;
+  int min_distance_sqr = 40 * 40;
   bool updated = false;
   QPointF marker_point;
   for (int i = 0; i < curves.size(); i++)
   {
     QwtPlotCurve* curve = static_cast<QwtPlotCurve*>(curves[i]);
     auto maybe_point = curvePointAt(curve, pointF.x());
-    if(maybe_point)
+    if (maybe_point)
     {
-      QPoint p(qwtPlot()->transform(QwtPlot::xBottom,maybe_point->x()),
-               qwtPlot()->transform(QwtPlot::yLeft,maybe_point->y()));
+      QPoint p(qwtPlot()->transform(QwtPlot::xBottom, maybe_point->x()),
+               qwtPlot()->transform(QwtPlot::yLeft, maybe_point->y()));
       QPoint diff = p - point;
-      int dist_sqr = diff.x()*diff.x() + diff.y()*diff.y();
-      if(dist_sqr < min_distance_sqr)
+      int dist_sqr = diff.x() * diff.x() + diff.y() * diff.y();
+      if (dist_sqr < min_distance_sqr)
       {
         updated = true;
         min_distance_sqr = dist_sqr;
@@ -1572,7 +1570,7 @@ void PlotWidget::showPointValues(QPoint point)
   _show_point_marker->setVisible(updated);
   _show_point_text->setVisible(updated);
 
-  if(updated)
+  if (updated)
   {
     QPointF offset_point = paint_to_plot(plot_to_paint(marker_point) + QPoint(15, -20));
 
@@ -1591,7 +1589,7 @@ void PlotWidget::showPointValues(QPoint point)
     _show_point_text->setValue(offset_point);
   }
 
-  if(updated || disappeared)
+  if (updated || disappeared)
   {
     replot();
   }

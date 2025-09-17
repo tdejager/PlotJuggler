@@ -52,7 +52,6 @@ public slots:
   }
 
 private:
-
   QPointF transform(QPoint);
 
   QPoint invTransform(QPointF);
