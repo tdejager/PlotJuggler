@@ -164,9 +164,6 @@ find_or_download_json()
 include(cmake/find_or_download_fmt.cmake)
 find_or_download_fmt()
 
-include(cmake/find_or_download_fastcdr.cmake)
-find_or_download_fastcdr()
-
 add_subdirectory(3rdparty/qwt/src)
 add_subdirectory(3rdparty/QCodeEditor)
 add_subdirectory(3rdparty/color_widgets)
