@@ -32,6 +32,8 @@ public:
   const std::map<QString, ToolboxPluginPtr>& toolboxes() const;
   const std::map<QString, ParserFactoryPtr>& parserFactories() const;
 
+  void unloadAllPlugins();
+
 private:
   std::unique_ptr<QPluginLoader> m_pluginLoader;
   QStringList _enabled_plugins;

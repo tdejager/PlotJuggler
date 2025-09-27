@@ -43,8 +43,7 @@ void PluginManager::loadPlugin(const QString& filename)
   catch (std::runtime_error& err)
   {
     qDebug() << QString("%1: skipping, because it threw the following exception: %2")
-                    .arg(filename)
-                    .arg(err.what());
+                    .arg(filename, err.what());
     return;
   }
   if (!plugin && pluginLoader.errorString().contains("is not an ELF object") == false)
@@ -167,6 +166,16 @@ const std::map<QString, ToolboxPluginPtr>& PluginManager::toolboxes() const
 const std::map<QString, ParserFactoryPtr>& PluginManager::parserFactories() const
 {
   return _parser_factories;
+}
+
+void PluginManager::unloadAllPlugins()
+{
+  _data_loader.clear();
+  _state_publisher.clear();
+  _data_streamer.clear();
+  _toolboxes.clear();
+  _parser_factories.clear();
+  _loaded_plugins.clear();
 }
 
 }  // namespace PJ

@@ -1753,25 +1753,21 @@ void MainWindow::loadPluginState(const QDomElement& root)
                               "<plugin ID=\"PluginName\" "));
     }
 
-    const auto& data_loaders = _plugin_manager.dataLoaders();
-    if (data_loaders.find(plugin_name) != data_loaders.end())
+    if (dataLoaders().find(plugin_name) != dataLoaders().end())
     {
-      data_loaders.at(plugin_name)->xmlLoadState(plugin_elem);
+      dataLoaders().at(plugin_name)->xmlLoadState(plugin_elem);
     }
-    const auto& data_streamers = _plugin_manager.dataStreamers();
-    if (data_streamers.find(plugin_name) != data_streamers.end())
+    if (dataStreamers().find(plugin_name) != dataStreamers().end())
     {
-      data_streamers.at(plugin_name)->xmlLoadState(plugin_elem);
+      dataStreamers().at(plugin_name)->xmlLoadState(plugin_elem);
     }
-    const auto& toolboxes = _plugin_manager.toolboxes();
-    if (toolboxes.find(plugin_name) != toolboxes.end())
+    if (toolboxes().find(plugin_name) != toolboxes().end())
     {
-      toolboxes.at(plugin_name)->xmlLoadState(plugin_elem);
+      toolboxes().at(plugin_name)->xmlLoadState(plugin_elem);
     }
-    const auto& state_publishers = _plugin_manager.statePublishers();
-    if (state_publishers.find(plugin_name) != state_publishers.end())
+    if (statePublishers().find(plugin_name) != statePublishers().end())
     {
-      StatePublisherPtr publisher = state_publishers.at(plugin_name);
+      StatePublisherPtr publisher = statePublishers().at(plugin_name);
       publisher->xmlLoadState(plugin_elem);
 
       if (_autostart_publishers && plugin_elem.attribute("status") == "active")
@@ -1794,12 +1790,12 @@ QDomElement MainWindow::savePluginState(QDomDocument& doc)
     }
   };
 
-  AddPlugins(_plugin_manager.dataLoaders());
-  AddPlugins(_plugin_manager.dataStreamers());
-  AddPlugins(_plugin_manager.toolboxes());
-  AddPlugins(_plugin_manager.statePublishers());
+  AddPlugins(dataLoaders());
+  AddPlugins(dataStreamers());
+  AddPlugins(toolboxes());
+  AddPlugins(statePublishers());
 
-  for (auto& it : _plugin_manager.statePublishers())
+  for (auto& it : statePublishers())
   {
     const auto& state_publisher = it.second;
     QDomElement plugin_elem = state_publisher->xmlSaveState(doc);
@@ -1936,7 +1932,7 @@ bool MainWindow::loadLayoutFromFile(QString filename)
 
     if (msgBox.clickedButton() == yes)
     {
-      if (_plugin_manager.dataStreamers().count(streamer_name) != 0)
+      if (dataStreamers().count(streamer_name) != 0)
       {
         auto allCurves = readAllCurvesFromXML(root);
 
@@ -1969,10 +1965,9 @@ bool MainWindow::loadLayoutFromFile(QString filename)
          plugin_elem = plugin_elem.nextSiblingElement())
     {
       const QString plugin_name = plugin_elem.nodeName();
-      if (_plugin_manager.statePublishers().find(plugin_name) !=
-          _plugin_manager.statePublishers().end())
+      if (statePublishers().find(plugin_name) != statePublishers().end())
       {
-        StatePublisherPtr publisher = _plugin_manager.statePublishers().at(plugin_name);
+        StatePublisherPtr publisher = statePublishers().at(plugin_name);
 
         if (plugin_elem.attribute("status") == "active")
         {
@@ -2539,6 +2534,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
   settings.setValue("MainWindow.streamingBufferValue", ui->streamingSpinBox->value());
   settings.setValue("MainWindow.timeTrackerSetting", (int)_tracker_param);
   settings.setValue("MainWindow.splitterWidth", ui->mainSplitter->sizes()[0]);
+
+  _plugin_manager.unloadAllPlugins();
 }
 
 void MainWindow::onAddCustomPlot(const std::string& plot_name)
@@ -2609,7 +2606,7 @@ void MainWindow::onPlaybackLoop()
   onUpdateLeftTableValues();
   updateReactivePlots();
 
-  for (auto& it : _plugin_manager.statePublishers())
+  for (auto& it : statePublishers())
   {
     it.second->play(_tracker_time);
   }
@@ -2816,7 +2813,7 @@ QDir::currentPath()).toString();
 
 void MainWindow::on_buttonLoadDatafile_clicked()
 {
-  if (_plugin_manager.dataLoaders().empty())
+  if (dataLoaders().empty())
   {
     QMessageBox::warning(this, tr("Warning"), tr("No plugin was loaded to process a data file\n"));
     return;
@@ -2827,7 +2824,7 @@ void MainWindow::on_buttonLoadDatafile_clicked()
   QString file_extension_filter;
 
   std::set<QString> extensions;
-  for (auto& it : _plugin_manager.dataLoaders())
+  for (auto& it : dataLoaders())
   {
     DataLoaderPtr loader = it.second;
     for (QString extension : loader->compatibleFileExtensions())
@@ -3187,7 +3184,7 @@ void MainWindow::on_comboStreaming_currentIndexChanged(const QString& current_te
 {
   QSettings settings;
   settings.setValue("MainWindow.previousStreamingPlugin", current_text);
-  auto streamer = _plugin_manager.dataStreamers().at(current_text);
+  auto streamer = dataStreamers().at(current_text);
   ui->buttonStreamingOptions->setEnabled(!streamer->availableActions().empty());
 
   std::pair<QAction*, int> notifications_pair = streamer->notificationAction();
@@ -3249,12 +3246,11 @@ void MainWindow::on_buttonRecentData_clicked()
 
 void MainWindow::on_buttonStreamingOptions_clicked()
 {
-  const auto& data_streamer = _plugin_manager.dataStreamers();
-  if (data_streamer.empty())
+  if (dataStreamers().empty())
   {
     return;
   }
-  auto streamer = data_streamer.at(ui->comboStreaming->currentText());
+  auto streamer = dataStreamers().at(ui->comboStreaming->currentText());
 
   PopupMenu* menu = new PopupMenu(ui->buttonStreamingOptions, this);
   for (auto action : streamer->availableActions())
