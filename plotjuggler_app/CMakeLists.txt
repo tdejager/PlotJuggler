@@ -1,6 +1,8 @@
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(wasmtime QUIET)
+
 qt5_add_resources(RES_SRC resource.qrc)
 
 qt5_wrap_ui(
@@ -47,7 +49,7 @@ set(PLOTJUGGLER_SRC
     messageparser_base.cpp
     menubar.cpp
     new_release_dialog.cpp
-    # plotlegend.cpp
+    plugin_manager.cpp
     plotwidget.cpp
     plotwidget_editor.cpp
     plotwidget_transforms.cpp
@@ -61,6 +63,7 @@ set(PLOTJUGGLER_SRC
     suggest_dialog.cpp
     # timeseries_qwt.cpp
     tabbedplotwidget.cpp
+    wasm_loader.cpp
     tab_widget.h
     tree_completer.h
     transforms/custom_function.cpp
@@ -84,6 +87,13 @@ set(PLOTJUGGLER_SRC
 
 add_executable(plotjuggler ${PLOTJUGGLER_SRC} ${RES_SRC} ${UI_SRC}
                            ${BACKWARD_ENABLE})
+
+if(wasmtime_FOUND)
+  message(STATUS "Wasmtime found, enabling WebAssembly support ${wasmtime_INCLUDE_DIRS}")
+  set(ENABLE_WASM)
+  target_compile_definitions(plotjuggler PRIVATE WASM_ENABLED)
+  target_link_libraries(plotjuggler PRIVATE wasmtime::wasmtime)
+endif()
 
 if(NOT WIN32)
   add_backward(plotjuggler)
