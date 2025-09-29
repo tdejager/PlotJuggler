@@ -8,7 +8,6 @@
 
 #include <QtPlugin>
 #include <QApplication>
-#include <map>
 #include "PlotJuggler/plotdata.h"
 #include "PlotJuggler/pj_plugin.h"
 
