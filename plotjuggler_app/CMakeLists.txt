@@ -1,6 +1,8 @@
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(wasmtime QUIET)
+
 qt5_add_resources(RES_SRC resource.qrc)
 
 if(WIN32)
@@ -52,7 +54,7 @@ set(PLOTJUGGLER_SRC
     messageparser_base.cpp
     menubar.cpp
     new_release_dialog.cpp
-    # plotlegend.cpp
+    plugin_manager.cpp
     plotwidget.cpp
     plotwidget_editor.cpp
     plotwidget_transforms.cpp
@@ -85,10 +87,13 @@ set(PLOTJUGGLER_SRC
     utils.cpp
     mainwindow.h
     realslider.h
+    wasm_runtime.cpp
+    wasm_parser.cpp
     nlohmann_parsers.cpp)
 
 add_executable(plotjuggler ${PLOTJUGGLER_SRC} ${RES_SRC} ${UI_SRC}
                            ${BACKWARD_ENABLE})
+
 
 if(NOT WIN32)
   add_backward(plotjuggler)
@@ -106,6 +111,7 @@ target_include_directories(
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/3rdparty/Qt-Advanced-Docking/include>
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/3rdparty/QCodeEditor/include>)
 
+
 target_link_libraries(
   plotjuggler
   PRIVATE ${QT_LINK_LIBRARIES}
@@ -116,7 +122,9 @@ target_link_libraries(
           QCodeEditor
           nlohmann_json::nlohmann_json
           fmt::fmt
-          lua::lua)
+          lua::lua
+          wasmtime::wasmtime
+        )
 
 if(COMPILING_WITH_CATKIN)
   target_link_libraries(plotjuggler PRIVATE ${catkin_LIBRARIES})
