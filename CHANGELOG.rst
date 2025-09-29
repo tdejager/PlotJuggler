@@ -2,6 +2,21 @@
 Changelog for package plotjuggler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge branch 'plugin_manager'
+* fix CI
+* add WASM based pligins (experimental)
+* add Ankel unordered map
+* minor changes
+* Merge pull request `#1185 <https://github.com/facontidavide/PlotJuggler/issues/1185>`_ from simonsag96/fix_tab_add_button
+  [Bugfix] Add Tab Button being placed outside plot widget
+* Fix tab adding button being placed outside plot widget
+* Merge pull request `#1184 <https://github.com/facontidavide/PlotJuggler/issues/1184>`_ from MichelJansson/feature/fix-windows-icon
+* Fixed windows app icon + moved resource file
+* created plugin manager
+* Contributors: Davide Faconti, Michel Jansson, Simon Sagmeister
+
 3.12.2 (2025-09-29)
 -------------------
 * Merge pull request `#1147 <https://github.com/facontidavide/PlotJuggler/issues/1147>`_ from gvz/nix_flake
