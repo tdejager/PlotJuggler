@@ -2,7 +2,7 @@
 
 function(find_or_download_wasmtime)
 
-  find_package(wasmtime QUIET)
+  find_package(wasmtime QUIET CONFIG)
 
   if(wasmtime_FOUND)
     message(STATUS "Found wasmtime in system")
@@ -49,7 +49,7 @@ function(find_or_download_wasmtime)
         return()
     endif()
 
-    cpmaddpackage(NAME wasmtime 
+    cpmaddpackage(NAME wasmtime
         URL ${WASMTIME_URL}
         URL_HASH SHA256=${WASMTIME_URL_HASH}
         DOWNLOAD_ONLY YES )
@@ -64,9 +64,7 @@ function(find_or_download_wasmtime)
                  INTERFACE_LINK_LIBRARIES ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME})
 
     set(wasmtime_FOUND TRUE)
-   
+
   endif()
 
 endfunction()
-
-
