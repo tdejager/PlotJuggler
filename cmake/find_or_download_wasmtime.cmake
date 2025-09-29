@@ -72,6 +72,16 @@ function(find_or_download_wasmtime)
     set(WASMTIME_COMPILE_DEFINITIONS "")
 
     if(WIN32)
+        # Add Windows system library dependencies
+        list(APPEND WASMTIME_LINK_LIBRARIES
+            ws2_32
+            advapi32
+            userenv
+            ntdll
+            shell32
+            ole32
+            bcrypt
+        )
         # Add compile definitions to disable dllimport for static linking
         list(APPEND WASMTIME_COMPILE_DEFINITIONS
             WASM_API_EXTERN=
