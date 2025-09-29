@@ -103,7 +103,7 @@ sudo snap install plotjuggler-ros
 This installer does __not__ include ROS plugins.
 
 **Windows Installer**:
-[PlotJuggler-Windows-3.9.3-installer](https://github.com/facontidavide/PlotJuggler/releases/download/3.9.3/PlotJuggler-Windows-3.9.3-installer.exe)
+Check the  [Release page](https://github.com/facontidavide/PlotJuggler/releases) to download the latest installer.
 
 ### Debian packages for ROS User
 
