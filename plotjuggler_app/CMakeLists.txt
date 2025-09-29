@@ -63,7 +63,6 @@ set(PLOTJUGGLER_SRC
     suggest_dialog.cpp
     # timeseries_qwt.cpp
     tabbedplotwidget.cpp
-    wasm_loader.cpp
     tab_widget.h
     tree_completer.h
     transforms/custom_function.cpp
@@ -83,17 +82,13 @@ set(PLOTJUGGLER_SRC
     utils.cpp
     mainwindow.h
     realslider.h
+    wasm_runtime.cpp
+    wasm_parser.cpp
     nlohmann_parsers.cpp)
 
 add_executable(plotjuggler ${PLOTJUGGLER_SRC} ${RES_SRC} ${UI_SRC}
                            ${BACKWARD_ENABLE})
 
-if(wasmtime_FOUND)
-  message(STATUS "Wasmtime found, enabling WebAssembly support ${wasmtime_INCLUDE_DIRS}")
-  set(ENABLE_WASM)
-  target_compile_definitions(plotjuggler PRIVATE WASM_ENABLED)
-  target_link_libraries(plotjuggler PRIVATE wasmtime::wasmtime)
-endif()
 
 if(NOT WIN32)
   add_backward(plotjuggler)
@@ -111,6 +106,7 @@ target_include_directories(
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/3rdparty/Qt-Advanced-Docking/include>
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/3rdparty/QCodeEditor/include>)
 
+
 target_link_libraries(
   plotjuggler
   PRIVATE ${QT_LINK_LIBRARIES}
@@ -121,7 +117,9 @@ target_link_libraries(
           QCodeEditor
           nlohmann_json::nlohmann_json
           fmt::fmt
-          lua::lua)
+          lua::lua
+          wasmtime::wasmtime
+        )
 
 if(COMPILING_WITH_CATKIN)
   target_link_libraries(plotjuggler PRIVATE ${catkin_LIBRARIES})

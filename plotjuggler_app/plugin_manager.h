@@ -10,7 +10,6 @@
 
 namespace PJ
 {
-
 class PluginManager
 {
 public:
@@ -23,8 +22,6 @@ public:
   void setDisabledPlugins(const QStringList& disabled_plugins);
 
   void loadPluginsFromFolder(const QString& folderPath);
-
-  void loadPlugin(const QString& pluginPath);
 
   const std::map<QString, DataLoaderPtr>& dataLoaders() const;
   const std::map<QString, StatePublisherPtr>& statePublishers() const;
@@ -46,6 +43,9 @@ private:
   std::map<QString, DataStreamerPtr> _data_streamer;
   std::map<QString, ToolboxPluginPtr> _toolboxes;
   std::map<QString, ParserFactoryPtr> _parser_factories;
+
+  void loadPlugin(const QString& pluginPath);
+  void loadWASM(const QString& pluginPath);
 };
 
 }  // namespace PJ

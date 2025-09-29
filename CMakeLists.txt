@@ -164,6 +164,9 @@ find_or_download_json()
 include(cmake/find_or_download_fmt.cmake)
 find_or_download_fmt()
 
+include(cmake/find_or_download_wasmtime.cmake)
+find_or_download_wasmtime()
+
 add_subdirectory(3rdparty/qwt/src)
 add_subdirectory(3rdparty/QCodeEditor)
 add_subdirectory(3rdparty/color_widgets)
@@ -272,6 +275,7 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/plotjuggler.svg
 
 # ######################## Main App, Libraries and Plugins
 # ##############################################################################
+# check the architecture (x86)
 
 add_subdirectory(plotjuggler_app)
 add_subdirectory(plotjuggler_plugins)
