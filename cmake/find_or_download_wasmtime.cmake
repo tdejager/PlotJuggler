@@ -28,7 +28,7 @@ function(find_or_download_wasmtime)
                 message(STATUS "Downloading Wasmtime for MacOS x86_64")
                 set(WASMTIME_URL "${WASMTIME_BASE_URL}/wasmtime-${WASMTIME_VERSION}-x86_64-macos-c-api.tar.xz")
                 set(WASMTIME_URL_HASH "f36607fb14d1f5392591aa756904c603f20fc642e26f0d44d7979053144ae695")
-            elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+            elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64" or CMAKE_SYSTEM_PROCESSOR MATCHES "arm64")
                 message(STATUS "Downloading Wasmtime for MacOS arm64")
                 set(WASMTIME_URL "${WASMTIME_BASE_URL}/wasmtime-${WASMTIME_VERSION}-aarch64-macos-c-api.tar.xz")
                 set(WASMTIME_URL_HASH "e17b8abce4ab187054a5b26feb84b54f4a5985e660cace6cd70f8d0b8eab1468")
@@ -38,7 +38,7 @@ function(find_or_download_wasmtime)
                 message(STATUS "Downloading Wasmtime for Linux x86_64")
                 set(WASMTIME_URL "${WASMTIME_BASE_URL}/wasmtime-${WASMTIME_VERSION}-x86_64-linux-c-api.tar.xz")
                 set(WASMTIME_URL_HASH "34749b52ef98e37bf7bf1076a6eaecb30f85a82aba78c7799e72ddacea2050fb")
-            elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+            elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64" or CMAKE_SYSTEM_PROCESSOR MATCHES "arm64")
                 message(STATUS "Downloading Wasmtime for Linux arm64")
                 set(WASMTIME_URL "${WASMTIME_BASE_URL}/wasmtime-${WASMTIME_VERSION}-aarch64-linux-c-api.tar.xz")
                 set(WASMTIME_URL_HASH "b9264a2d4927ed2a38a51e5970dcc9d6f50d67e54753bd707970fdac6310b6fb")
@@ -48,6 +48,10 @@ function(find_or_download_wasmtime)
         message(FATAL_ERROR "Unsupported platform for wasmtime")
         return()
     endif()
+    SET(WASMTIME_STATIC_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}wasmtime${CMAKE_STATIC_LIBRARY_SUFFIX})
+
+    message(STATUS "WASMTIME_URL: ${WASMTIME_URL}")
+    message(STATUS "WASMTIME_STATIC_LIBRARY_NAME: ${WASMTIME_STATIC_LIBRARY_NAME}")
 
     if(NOT WASMTIME_URL)
         message(FATAL_ERROR "Unsupported platform for wasmtime: ${CMAKE_SYSTEM_PROCESSOR}")
@@ -61,15 +65,13 @@ function(find_or_download_wasmtime)
 
     add_library(wasmtime::wasmtime INTERFACE IMPORTED)
 
-    SET(WASMTIME_STATIC_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}wasmtime${CMAKE_STATIC_LIBRARY_SUFFIX})
-
     set_target_properties(
       wasmtime::wasmtime
       PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${wasmtime_SOURCE_DIR}/include
                  INTERFACE_LINK_LIBRARIES ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME})
 
     set(wasmtime_FOUND TRUE)
-
+    
   endif()
 
 endfunction()
