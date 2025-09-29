@@ -2,7 +2,7 @@
 
 function(find_or_download_wasmtime)
 
-  find_package(wasmtime QUIET)
+  find_package(wasmtime QUIET CONFIG)
 
   if(wasmtime_FOUND)
     message(STATUS "Found wasmtime in system")
@@ -28,7 +28,7 @@ function(find_or_download_wasmtime)
                 message(STATUS "Downloading Wasmtime for MacOS x86_64")
                 set(WASMTIME_URL "${WASMTIME_BASE_URL}/wasmtime-${WASMTIME_VERSION}-x86_64-macos-c-api.tar.xz")
                 set(WASMTIME_URL_HASH "f36607fb14d1f5392591aa756904c603f20fc642e26f0d44d7979053144ae695")
-            elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "armv8" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+            elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64)$")
                 message(STATUS "Downloading Wasmtime for MacOS arm64")
                 set(WASMTIME_URL "${WASMTIME_BASE_URL}/wasmtime-${WASMTIME_VERSION}-aarch64-macos-c-api.tar.xz")
                 set(WASMTIME_URL_HASH "e17b8abce4ab187054a5b26feb84b54f4a5985e660cace6cd70f8d0b8eab1468")
@@ -38,35 +38,65 @@ function(find_or_download_wasmtime)
                 message(STATUS "Downloading Wasmtime for Linux x86_64")
                 set(WASMTIME_URL "${WASMTIME_BASE_URL}/wasmtime-${WASMTIME_VERSION}-x86_64-linux-c-api.tar.xz")
                 set(WASMTIME_URL_HASH "34749b52ef98e37bf7bf1076a6eaecb30f85a82aba78c7799e72ddacea2050fb")
-            elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "armv8" OR CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+            elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64)$")
                 message(STATUS "Downloading Wasmtime for Linux arm64")
                 set(WASMTIME_URL "${WASMTIME_BASE_URL}/wasmtime-${WASMTIME_VERSION}-aarch64-linux-c-api.tar.xz")
                 set(WASMTIME_URL_HASH "b9264a2d4927ed2a38a51e5970dcc9d6f50d67e54753bd707970fdac6310b6fb")
             endif()
         endif()
-    else()
-        message(FATAL_ERROR "Unsupported platform for wasmtime")
+    endif()
+
+    if(NOT WASMTIME_URL)
+        message(FATAL_ERROR "Unsupported platform for wasmtime: ${CMAKE_SYSTEM_PROCESSOR}")
         return()
     endif()
 
-    cpmaddpackage(NAME wasmtime 
+    SET(WASMTIME_STATIC_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}wasmtime${CMAKE_STATIC_LIBRARY_SUFFIX})
+    message(STATUS "WASMTIME_URL: ${WASMTIME_URL}")
+    message(STATUS "WASMTIME_STATIC_LIBRARY_NAME: ${WASMTIME_STATIC_LIBRARY_NAME}")
+
+    cpmaddpackage(NAME wasmtime
         URL ${WASMTIME_URL}
         URL_HASH SHA256=${WASMTIME_URL_HASH}
         DOWNLOAD_ONLY YES )
 
     add_library(wasmtime::wasmtime INTERFACE IMPORTED)
 
-    SET(WASMTIME_STATIC_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}wasmtime${CMAKE_STATIC_LIBRARY_SUFFIX})
+    # check that the library is present:
+    if(NOT EXISTS ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME})
+        message(FATAL_ERROR "Wasmtime library not found: ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME}")
+    endif()
+
+    # On Windows, Wasmtime requires additional system libraries and compile definitions for static linking
+    set(WASMTIME_LINK_LIBRARIES ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME})
+    set(WASMTIME_COMPILE_DEFINITIONS "")
+
+    if(WIN32)
+        # Add Windows system library dependencies
+        list(APPEND WASMTIME_LINK_LIBRARIES
+            ws2_32
+            advapi32
+            userenv
+            ntdll
+            shell32
+            ole32
+            bcrypt
+        )
+        # Add compile definitions to disable dllimport for static linking
+        list(APPEND WASMTIME_COMPILE_DEFINITIONS
+            WASM_API_EXTERN=
+            WASI_API_EXTERN=
+        )
+    endif()
 
     set_target_properties(
       wasmtime::wasmtime
       PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${wasmtime_SOURCE_DIR}/include
-                 INTERFACE_LINK_LIBRARIES ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME})
+                 INTERFACE_LINK_LIBRARIES "${WASMTIME_LINK_LIBRARIES}"
+                 INTERFACE_COMPILE_DEFINITIONS "${WASMTIME_COMPILE_DEFINITIONS}")
 
     set(wasmtime_FOUND TRUE)
-   
+
   endif()
 
 endfunction()
-
-
