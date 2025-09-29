@@ -67,10 +67,23 @@ function(find_or_download_wasmtime)
         message(FATAL_ERROR "Wasmtime library not found: ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME}")
     endif()
 
+    # On Windows, Wasmtime requires additional system libraries and compile definitions for static linking
+    set(WASMTIME_LINK_LIBRARIES ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME})
+    set(WASMTIME_COMPILE_DEFINITIONS "")
+
+    if(WIN32)
+        # Add compile definitions to disable dllimport for static linking
+        list(APPEND WASMTIME_COMPILE_DEFINITIONS
+            WASM_API_EXTERN=
+            WASI_API_EXTERN=
+        )
+    endif()
+
     set_target_properties(
       wasmtime::wasmtime
       PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${wasmtime_SOURCE_DIR}/include
-                 INTERFACE_LINK_LIBRARIES ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME})
+                 INTERFACE_LINK_LIBRARIES "${WASMTIME_LINK_LIBRARIES}"
+                 INTERFACE_COMPILE_DEFINITIONS "${WASMTIME_COMPILE_DEFINITIONS}")
 
     set(wasmtime_FOUND TRUE)
 
