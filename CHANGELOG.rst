@@ -2,8 +2,8 @@
 Changelog for package plotjuggler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+3.13.0 (2025-09-29)
+-------------------
 * Merge branch 'plugin_manager'
 * fix CI
 * add WASM based pligins (experimental)
