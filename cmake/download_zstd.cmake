@@ -1,4 +1,4 @@
-function(find_or_download_zstd)
+function(download_zstd)
 
   if(NOT TARGET zstd::libzstd_static)
 

@@ -1,8 +1,6 @@
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(wasmtime QUIET)
-
 qt5_add_resources(RES_SRC resource.qrc)
 
 if(WIN32)
@@ -87,13 +85,19 @@ set(PLOTJUGGLER_SRC
     utils.cpp
     mainwindow.h
     realslider.h
-    wasm_runtime.cpp
-    wasm_parser.cpp
     nlohmann_parsers.cpp)
+
+if(wasmtime_FOUND)
+  list(APPEND PLOTJUGGLER_SRC wasm_runtime.cpp wasm_parser.cpp)
+endif()
 
 add_executable(plotjuggler ${PLOTJUGGLER_SRC} ${RES_SRC} ${UI_SRC}
                            ${BACKWARD_ENABLE})
 
+if(wasmtime_FOUND)
+  target_link_libraries(plotjuggler PRIVATE wasmtime::wasmtime)
+  target_compile_definitions(plotjuggler PRIVATE WASM_RUNTIME_ENABLED)
+endif()
 
 if(NOT WIN32)
   add_backward(plotjuggler)
@@ -123,7 +127,6 @@ target_link_libraries(
           nlohmann_json::nlohmann_json
           fmt::fmt
           lua::lua
-          wasmtime::wasmtime
         )
 
 if(COMPILING_WITH_CATKIN)

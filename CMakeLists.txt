@@ -148,7 +148,6 @@ include_directories(
   ${Qt5OpenGL_INCLUDE_DIRS})
 
 # ########################  3rd party dependencies  #########################
-
 include(FetchContent)
 include(cmake/CPM.cmake)
 
@@ -160,12 +159,21 @@ find_or_download_data_tamer()
 
 include(cmake/find_or_download_json.cmake)
 find_or_download_json()
-
+  
 include(cmake/find_or_download_fmt.cmake)
 find_or_download_fmt()
 
-include(cmake/find_or_download_wasmtime.cmake)
-find_or_download_wasmtime()
+if(NOT COMPILING_WITH_AMENT)
+
+  include(cmake/download_wasmtime.cmake)
+  download_wasmtime()
+
+  include(${PROJECT_SOURCE_DIR}/cmake/download_lz4.cmake)
+  download_lz4()
+
+  include(${PROJECT_SOURCE_DIR}/cmake/download_zstd.cmake)
+  download_zstd()
+endif()
 
 add_subdirectory(3rdparty/qwt/src)
 add_subdirectory(3rdparty/QCodeEditor)

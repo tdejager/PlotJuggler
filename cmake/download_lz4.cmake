@@ -1,4 +1,4 @@
-function(find_or_download_lz4)
+function(download_lz4)
 
   if(NOT TARGET LZ4::lz4_static)
 
