@@ -95,7 +95,7 @@ function(download_wasmtime)
                  INTERFACE_LINK_LIBRARIES "${WASMTIME_LINK_LIBRARIES}"
                  INTERFACE_COMPILE_DEFINITIONS "${WASMTIME_COMPILE_DEFINITIONS}")
 
-    set(wasmtime_FOUND TRUE CACHE BOOL "Whether wasmtime was found or downloaded")  
+    set(wasmtime_FOUND TRUE CACHE BOOL "Whether wasmtime was found or downloaded")
 
   endif()
 

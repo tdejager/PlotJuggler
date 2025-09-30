@@ -159,7 +159,7 @@ find_or_download_data_tamer()
 
 include(cmake/find_or_download_json.cmake)
 find_or_download_json()
-  
+
 include(cmake/find_or_download_fmt.cmake)
 find_or_download_fmt()
 
