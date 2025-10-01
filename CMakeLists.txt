@@ -163,17 +163,21 @@ find_or_download_json()
 include(cmake/find_or_download_fmt.cmake)
 find_or_download_fmt()
 
-if(NOT COMPILING_WITH_AMENT)
+# IMPORTANT: LZ4 and ZSTD must be included after Arrow, since Arrow also includes
+# Findlz4Alt.cmake and FindzstdAlt.cmake and we want to avoid target conflicts
+find_package(Arrow QUIET)
 
+include(${PROJECT_SOURCE_DIR}/cmake/find_or_download_lz4.cmake)
+find_or_download_lz4()
+
+include(${PROJECT_SOURCE_DIR}/cmake/find_or_download_zstd.cmake)
+find_or_download_zstd()
+
+if(NOT COMPILING_WITH_AMENT)
   include(cmake/download_wasmtime.cmake)
   download_wasmtime()
-
-  include(${PROJECT_SOURCE_DIR}/cmake/download_lz4.cmake)
-  download_lz4()
-
-  include(${PROJECT_SOURCE_DIR}/cmake/download_zstd.cmake)
-  download_zstd()
 endif()
+
 
 add_subdirectory(3rdparty/qwt/src)
 add_subdirectory(3rdparty/QCodeEditor)

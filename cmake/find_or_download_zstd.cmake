@@ -1,7 +1,11 @@
-function(download_zstd)
+function(find_or_download_zstd)
 
-  if(NOT TARGET zstd::libzstd_static)
+  find_package(ZSTD QUIET)
 
+  # Check if ZSTD targets already exist (e.g., from Arrow)
+  if(TARGET zstd::libzstd_static)
+    message(STATUS "ZSTD targets already defined (likely by Arrow)")
+  else()
     message(STATUS "Downloading and compiling ZSTD")
 
     # zstd ###
@@ -25,7 +29,7 @@ function(download_zstd)
 
     add_compile_options(-DZSTD_DISABLE_ASM)
 
-    set(ZSTD_FOUND TRUE FORCE)
+    set(ZSTD_FOUND TRUE PARENT_SCOPE)
 
     # define a helper to build both static and shared variants
     macro(build_zstd_variant TYPE SUFFIX)
@@ -41,7 +45,6 @@ function(download_zstd)
 
     # now build both
     build_zstd_variant(STATIC static)
-    build_zstd_variant(SHARED shared)
 
   endif()
 

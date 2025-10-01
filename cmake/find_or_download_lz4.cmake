@@ -1,7 +1,11 @@
-function(download_lz4)
+function(find_or_download_lz4)
 
-  if(NOT TARGET LZ4::lz4_static)
+  find_package(LZ4 QUIET)
 
+  # Check if LZ4 targets already exist (e.g., from Arrow)
+  if(TARGET LZ4::lz4_static)
+    message(STATUS "LZ4 targets already defined (likely by Arrow)")
+  else()
     message(STATUS "Downloading and compiling LZ4")
 
     # lz4 ###
@@ -28,7 +32,6 @@ function(download_lz4)
 
     # now build both
     build_lz4_variant(STATIC static)
-    build_lz4_variant(SHARED shared)
 
   endif()
 
