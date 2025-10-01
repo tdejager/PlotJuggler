@@ -2,8 +2,11 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QDebug>
+
+#ifdef WASM_RUNTIME_ENABLED
 #include "wasm_runtime.hpp"
 #include "wasm_parser.hpp"
+#endif
 
 namespace PJ
 {
@@ -185,6 +188,7 @@ void PluginManager::unloadAllPlugins()
 
 void PluginManager::loadWASM(const QString& pluginPath)
 {
+#ifdef WASM_RUNTIME_ENABLED
   try
   {
     auto runtime = std::make_unique<WasmRuntime>(pluginPath.toStdString());
@@ -234,6 +238,9 @@ void PluginManager::loadWASM(const QString& pluginPath)
   {
     qDebug() << QString("Failed to load WASM plugin %1: %2").arg(pluginPath, e.what());
   }
+#else
+  qDebug() << "WASM runtime support is not enabled in this build of PlotJuggler.";
+#endif
 }
 
 }  // namespace PJ

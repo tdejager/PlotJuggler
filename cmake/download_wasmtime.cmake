@@ -1,6 +1,6 @@
 
 
-function(find_or_download_wasmtime)
+function(download_wasmtime)
 
   find_package(wasmtime QUIET CONFIG)
 
@@ -47,7 +47,7 @@ function(find_or_download_wasmtime)
     endif()
 
     if(NOT WASMTIME_URL)
-        message(FATAL_ERROR "Unsupported platform for wasmtime: ${CMAKE_SYSTEM_PROCESSOR}")
+        message(ERROR "Unsupported platform for wasmtime: ${CMAKE_SYSTEM_PROCESSOR}")
         return()
     endif()
 
@@ -64,7 +64,7 @@ function(find_or_download_wasmtime)
 
     # check that the library is present:
     if(NOT EXISTS ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME})
-        message(FATAL_ERROR "Wasmtime library not found: ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME}")
+        message(ERROR "Wasmtime library not found: ${wasmtime_SOURCE_DIR}/lib/${WASMTIME_STATIC_LIBRARY_NAME}")
     endif()
 
     # On Windows, Wasmtime requires additional system libraries and compile definitions for static linking
@@ -95,7 +95,7 @@ function(find_or_download_wasmtime)
                  INTERFACE_LINK_LIBRARIES "${WASMTIME_LINK_LIBRARIES}"
                  INTERFACE_COMPILE_DEFINITIONS "${WASMTIME_COMPILE_DEFINITIONS}")
 
-    set(wasmtime_FOUND TRUE)
+    set(wasmtime_FOUND TRUE CACHE BOOL "Whether wasmtime was found or downloaded")
 
   endif()
 
