@@ -6,17 +6,10 @@ qt5_wrap_ui(UI_SRC dialog_mcap.ui)
 add_library(DataLoadMCAP SHARED dataload_mcap.cpp dialog_mcap.cpp ${UI_SRC})
 target_include_directories(DataLoadMCAP PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty)
 
-if(COMPILING_WITH_AMENT)
-  find_package(LZ4 REQUIRED)
-  find_package(ZSTD REQUIRED)
-  target_include_directories(DataLoadMCAP PRIVATE  ${LZ4_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIR})
-  target_link_libraries(DataLoadMCAP PRIVATE ${LZ4_LIBRARY} ${ZSTD_LIBRARY})
-else()
- target_link_libraries(DataLoadMCAP
+target_link_libraries(DataLoadMCAP
    PRIVATE
     LZ4::lz4_static
     zstd::libzstd_static)
-endif()
 
 target_link_libraries(DataLoadMCAP
    PRIVATE

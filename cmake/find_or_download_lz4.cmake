@@ -1,11 +1,14 @@
 function(find_or_download_lz4)
 
+  if(TARGET LZ4::lz4_static)
+    message(STATUS "LZ4 targets already defined")
+    return()
+  endif()
+
   find_package(LZ4 QUIET)
 
   # Check if LZ4 targets already exist (e.g., from Arrow)
-  if(TARGET LZ4::lz4_static)
-    message(STATUS "LZ4 targets already defined (likely by Arrow)")
-  else()
+  if(NOT TARGET LZ4::lz4_static)
     message(STATUS "Downloading and compiling LZ4")
 
     # lz4 ###

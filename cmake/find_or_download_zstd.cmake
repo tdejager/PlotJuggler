@@ -1,12 +1,15 @@
 function(find_or_download_zstd)
 
+  if(TARGET zstd::libzstd_static)
+    message(STATUS "ZSTD targets already defined")
+    return()
+  endif()
+
   find_package(ZSTD QUIET)
 
   # Check if ZSTD targets already exist (e.g., from Arrow)
-  if(TARGET zstd::libzstd_static)
-    message(STATUS "ZSTD targets already defined (likely by Arrow)")
-  else()
-    message(STATUS "Downloading and compiling ZSTD")
+  if(NOT TARGET zstd::libzstd_static)
+     message(STATUS "Downloading and compiling ZSTD")
 
     # zstd ###
     cpmaddpackage(

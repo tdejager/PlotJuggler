@@ -20,15 +20,31 @@
 # LZ4_LIBRARY
 #
 
-find_path(LZ4_INCLUDE_DIR NAMES lz4.h)
+if(UNIX)
+  find_package(PkgConfig QUIET)
+  pkg_search_module(PC_LZ4 lz4)
+endif()
+
+find_path(LZ4_INCLUDE_DIR
+  NAMES lz4.h
+  HINTS
+    ${PC_LZ4_INCLUDEDIR}
+    ${PC_LZ4_INCLUDE_DIRS}
+)
 
 # find shared and static libraries
 find_library(LZ4_SHARED_LIBRARY
   NAMES ${CMAKE_SHARED_LIBRARY_PREFIX}lz4${CMAKE_SHARED_LIBRARY_SUFFIX}
-)
+  HINTS
+    ${PC_LZ4_LIBDIR}
+    ${PC_LZ4_LIBRARY_DIRS}
+  )
 
 find_library(LZ4_STATIC_LIBRARY
   NAMES ${CMAKE_STATIC_LIBRARY_PREFIX}lz4${CMAKE_STATIC_LIBRARY_SUFFIX}
+  HINTS
+    ${PC_LZ4_LIBDIR}
+    ${PC_LZ4_LIBRARY_DIRS}
 )
 
 include(FindPackageHandleStandardArgs)

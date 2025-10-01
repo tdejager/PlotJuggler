@@ -17,18 +17,29 @@
 #   ZSTD_INCLUDE_DIR ZSTD_LIBRARY
 #
 
-# find Zstd include dir
-find_path(ZSTD_INCLUDE_DIR
-  NAMES zstd.h
+if(UNIX)
+  find_package(PkgConfig QUIET)
+  pkg_search_module(PC_ZSTD libzstd)
+endif()
+
+find_path(ZSTD_INCLUDE_DIR zstd.h
+  HINTS
+    ${PC_ZSTD_INCLUDEDIR}
+    ${PC_ZSTD_INCLUDE_DIRS}
 )
 
-# find shared and static libraries
 find_library(ZSTD_SHARED_LIBRARY
   NAMES ${CMAKE_SHARED_LIBRARY_PREFIX}zstd${CMAKE_SHARED_LIBRARY_SUFFIX}
+  HINTS
+    ${PC_ZSTD_LIBDIR}
+    ${PC_ZSTD_LIBRARY_DIRS}
 )
 
 find_library(ZSTD_STATIC_LIBRARY
   NAMES ${CMAKE_STATIC_LIBRARY_PREFIX}zstd${CMAKE_STATIC_LIBRARY_SUFFIX}
+  HINTS
+    ${PC_ZSTD_LIBDIR}
+    ${PC_ZSTD_LIBRARY_DIRS}
 )
 
 include(FindPackageHandleStandardArgs)
