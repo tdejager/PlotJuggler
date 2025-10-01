@@ -811,9 +811,10 @@ void MainWindow::onPlotAdded(PlotWidget* plot)
   plot->setKeepRatioXY(ui->buttonRatio->isChecked());
   plot->configureTracker(_tracker_param);
   plot->onShowPlot(ui->buttonShowpoint->isChecked());
-  if (ui->buttonReferencePoint->isChecked())
+  if (ui->buttonReferencePoint->isChecked() && _reference_tracker_time.has_value())
   {
-    plot->onReferenceLineChecked(ui->buttonReferencePoint->isChecked(), _reference_tracker_time);
+    plot->onReferenceLineChecked(ui->buttonReferencePoint->isChecked(),
+                                 _reference_tracker_time.value());
   }
 }
 
@@ -3355,10 +3356,16 @@ void MainWindow::on_buttonCloseStatus_clicked()
 
 void MainWindow::on_buttonReferencePoint_toggled(bool checked)
 {
-  _reference_tracker_time = _tracker_time;
-  this->forEachWidget([checked, this](PlotWidget* plot) {
-    plot->onReferenceLineChecked(checked, this->_reference_tracker_time);
-  });
+  if (checked)
+  {
+    _reference_tracker_time = _tracker_time;
+  }
+  else
+  {
+    _reference_tracker_time = std::nullopt;
+  }
+  this->forEachWidget(
+      [checked, this](PlotWidget* plot) { plot->onReferenceLineChecked(checked, _tracker_time); });
 }
 
 void MainWindow::on_buttonShowpoint_toggled(bool checked)

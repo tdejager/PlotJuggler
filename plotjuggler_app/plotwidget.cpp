@@ -448,6 +448,7 @@ void PlotWidget::onDataSourceRemoved(const std::string& src_name)
   if (deleted)
   {
     _tracker->redraw();
+    _reference_tracker->redraw();
     emit curveListChanged();
   }
   if (_background_item && _background_item->dataName() == QString::fromStdString(src_name))
@@ -462,6 +463,7 @@ void PlotWidget::removeAllCurves()
   PlotWidgetBase::removeAllCurves();
   setModeXY(false);
   _tracker->redraw();
+  _reference_tracker->redraw();
   _flip_x->setChecked(false);
   _flip_y->setChecked(false);
 }
@@ -1038,6 +1040,7 @@ void PlotWidget::configureTracker(CurveTracker::Parameter val)
 void PlotWidget::enableTracker(bool enable)
 {
   _tracker->setEnabled(enable && !isXYPlot());
+  _reference_tracker->setEnabled(enable && !isXYPlot());
 }
 
 bool PlotWidget::isTrackerEnabled() const

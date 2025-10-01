@@ -139,7 +139,7 @@ private:
   bool _autostart_publishers;
 
   double _tracker_time;
-  double _reference_tracker_time;
+  std::optional<double> _reference_tracker_time;
 
   std::vector<FileLoadInfo> _loaded_datafiles_history;
   std::vector<FileLoadInfo> _loaded_datafiles_previous;
