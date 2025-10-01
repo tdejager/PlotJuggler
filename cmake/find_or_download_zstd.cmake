@@ -25,19 +25,23 @@ function(find_or_download_zstd)
 
     add_compile_options(-DZSTD_DISABLE_ASM)
 
-    set(ZSTD_FOUND TRUE)
+    set(ZSTD_FOUND TRUE FORCE)
 
-    add_library(libzstd_static STATIC ${Sources} ${Headers})
-    set_property(TARGET libzstd_static PROPERTY POSITION_INDEPENDENT_CODE ON)
+    # define a helper to build both static and shared variants
+    macro(build_zstd_variant TYPE SUFFIX)
+      set(target libzstd_${SUFFIX})
+      add_library(${target} ${TYPE} ${Sources} ${Headers})
+      set_property(TARGET ${target} PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-    add_library(zstd::libzstd_static INTERFACE IMPORTED)
-    set_target_properties(zstd::libzstd_static
-      PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${zstd_SOURCE_DIR}/lib
-                 INTERFACE_LINK_LIBRARIES libzstd_static)
-
-    set_target_properties(zstd::libzstd_static PROPERTIES
+      add_library(zstd::${target} INTERFACE IMPORTED)
+      set_target_properties(zstd::${target} PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES ${zstd_SOURCE_DIR}/lib
-        INTERFACE_LINK_LIBRARIES libzstd_static)
+        INTERFACE_LINK_LIBRARIES ${target})
+    endmacro()
+
+    # now build both
+    build_zstd_variant(STATIC static)
+    build_zstd_variant(SHARED shared)
 
   endif()
 
