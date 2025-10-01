@@ -2,6 +2,16 @@
 Changelog for package plotjuggler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* [Feature] New Filter to display the time since the previous datapoint (`#1180 <https://github.com/facontidavide/PlotJuggler/issues/1180>`_)
+  * add new filter to get the time since the last data point
+  * rename for clarity
+* fix LZ4 and ZSTD (`#1188 <https://github.com/facontidavide/PlotJuggler/issues/1188>`_)
+* fix issue `#1189 <https://github.com/facontidavide/PlotJuggler/issues/1189>`_
+* make library rosx static
+* Contributors: Davide Faconti, Simon Sagmeister
+
 3.13.0 (2025-09-29)
 -------------------
 * Merge branch 'plugin_manager'
