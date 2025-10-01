@@ -2,8 +2,8 @@
 Changelog for package plotjuggler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+3.13.1 (2025-10-01)
+-------------------
 * [Feature] New Filter to display the time since the previous datapoint (`#1180 <https://github.com/facontidavide/PlotJuggler/issues/1180>`_)
   * add new filter to get the time since the last data point
   * rename for clarity
