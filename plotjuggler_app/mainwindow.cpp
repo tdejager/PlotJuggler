@@ -606,7 +606,7 @@ void MainWindow::initializePlugins()
       auto options_button = new QPushButton(ui->framePublishers);
       options_button->setFlat(true);
       options_button->setFixedSize({ 24, 24 });
-      ui->layoutPublishers->addWidget(options_button, rpub_rowow, 2);
+      ui->layoutPublishers->addWidget(options_button, pub_row, 2);
 
       options_button->setIcon(LoadSvg(":/resources/svg/settings_cog.svg", "light"));
       options_button->setIconSize({ 16, 16 });
