@@ -802,7 +802,15 @@ bool PlotWidget::xmlLoadState(QDomElement& plot_widget, bool autozoom)
         QDomElement transform_el = curve_element.firstChildElement("transform");
         if (ts && transform_el.isNull() == false)
         {
-          ts->setTransform(transform_el.attribute("name"));
+          if (!ts->setTransform(transform_el.attribute("name")) || !ts->transform())
+          {
+            QMessageBox::warning(
+                qwtPlot(), "Warning",
+                tr("Can't restore the transform for curve [%1].\n"
+                   "Transform [%2] not found.\nAre you using an old configuration file?")
+                    .arg(curve_name, transform_el.attribute("name")));
+            continue;
+          }
           ts->transform()->xmlLoadState(transform_el);
           ts->updateCache(true);
           auto alias = transform_el.attribute("alias");
