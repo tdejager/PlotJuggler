@@ -2,8 +2,8 @@
 Changelog for package plotjuggler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+3.13.2 (2025-10-07)
+-------------------
 * Fix issue `#1194 <https://github.com/facontidavide/PlotJuggler/issues/1194>`_
 * address issue `#1195 <https://github.com/facontidavide/PlotJuggler/issues/1195>`_
 * fix issue `#1193 <https://github.com/facontidavide/PlotJuggler/issues/1193>`_
