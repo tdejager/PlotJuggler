@@ -1698,7 +1698,19 @@ void MainWindow::dropEvent(QDropEvent* event)
 
   for (const auto& url : urls)
   {
-    file_names << QDir::toNativeSeparators(url.toLocalFile());
+    const auto local_file = url.toLocalFile();
+    // check if the URL is a folder instead of a file
+    QFileInfo fileinfo(local_file);
+    if (fileinfo.exists() && fileinfo.isFile())
+    {
+      file_names << QDir::toNativeSeparators(local_file);
+    }
+    else
+    {
+      QMessageBox::warning(
+          this, tr("Error"),
+          tr("The dropped item is not a valid file and will be ignored:\n [%1]").arg(local_file));
+    }
   }
 
   loadDataFromFiles(file_names);
