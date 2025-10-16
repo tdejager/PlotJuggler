@@ -1,0 +1,23 @@
+[workspace]
+preview = ["pixi-build"]
+channels = [
+    "https://prefix.dev/pixi-build-backends",
+    "https://prefix.dev/robostack-jazzy",  # or robostack-humble, robostack-noetic, etc.
+    "https://prefix.dev/conda-forge"
+]
+platforms = ["linux-64", "osx-arm64"]
+
+[dependencies]
+# 1A
+ros-jazzy-plotjuggler = { path = "."}
+
+[package.build]
+backend = { name = "pixi-build-ros", version = "*" }
+[package.build.config]
+distro = "jazzy"  # or "humble", "noetic", etc.
+debug-dir = "./debug"
+[[package.build.config.extra-package-mappings]]
+lua-dev = { conda = ["lua"] }
+
+[tasks]
+start = "plotjuggler"
