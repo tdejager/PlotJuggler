@@ -11,18 +11,7 @@ platforms = ["linux-64", "osx-arm64", "win-64"]
 cxx_compiler = ["vs2022"]
 
 [dependencies]
-# 1A
-ros-jazzy-plotjuggler = { path = "." }
-
-[package.build]
-backend = { name = "pixi-build-ros", version = "*" }
-
-[package.build.config]
-distro = "jazzy"  # or "humble", "noetic", etc.
-debug-dir = "./debug"
-
-[[package.build.config.extra-package-mappings]]
-lua-dev = { conda = ["lua"] }
+ros-jazzy-plotjuggler = { path = "./pixi_ros"}
 
 [tasks]
 start = "plotjuggler"
