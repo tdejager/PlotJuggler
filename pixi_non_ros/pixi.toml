@@ -8,7 +8,7 @@ source = { path = "../" }
 
 [package.build.config]
 # For debugging recipe output and other debug data
-debug-dir = "./debug"
+debug_dir = "./debug"
 
 [package.host-dependencies]
 qt-main = "*"
