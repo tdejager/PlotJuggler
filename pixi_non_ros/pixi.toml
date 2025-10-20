@@ -1,0 +1,22 @@
+[package]
+name = "plotjuggler"
+version = "3.13.2"
+
+[package.build]
+backend = { name = "pixi-build-cmake", version = "*" }
+source = { path = "../" }
+
+[package.build.config]
+# For debugging recipe output and other debug data
+debug-dir = "./debug"
+
+[package.host-dependencies]
+qt-main = "*"
+lua = "*"
+fmt = "*"
+lz4-c = "*"
+zstd = "*"
+nlohmann_json = "*"
+protobuf = "*"
+zeromq = "*"
+arrow-cpp = "*"

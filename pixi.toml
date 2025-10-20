@@ -2,16 +2,56 @@
 preview = ["pixi-build"]
 channels = [
   "https://prefix.dev/pixi-build-backends",
-  "https://prefix.dev/robostack-jazzy",  # or robostack-humble, robostack-noetic, etc.
   "https://prefix.dev/conda-forge"
 ]
 platforms = ["linux-64", "osx-arm64", "win-64"]
 
-[workspace.target.win.build-variants]
+[workspace.target.win-64.build-variants]
+# We need this to compile on windows correctly
+# otherwise it uses a too old stdlib version
 cxx_compiler = ["vs2022"]
 
-[dependencies]
-ros-jazzy-plotjuggler = { path = "./pixi_ros"}
+# ROS2 is our default
+[feature.jazzy]
+channels = [
+  "https://prefix.dev/robostack-jazzy",
+]
 
+[feature.jazzy.dependencies]
+ros-jazzy-plotjuggler = { path = "./pixi_jazzy" }
+
+# ROS1 build
+[feature.noetic]
+channels = [
+  "https://prefix.dev/robostack-noetic",  # or robostack-humble, robostack-noetic, etc.
+]
+
+[feature.noetic.dependencies]
+ros-noetic-plotjuggler = { path = "./pixi_noetic" }
+
+# Environment for non-ROS build
+[feature.non-ros.dependencies]
+plotjuggler = { path = "./pixi_non_ros" }
+
+# Task to start plotjuggler
 [tasks]
 start = "plotjuggler"
+
+# Environments for both a ros and non-ros build
+[environments]
+default = ["jazzy"]
+noetic = ["noetic"]
+non-ros = ["non-ros"]
+
+# [package.build]
+# backend = { name = "pixi-build-ros", version = "*" }
+# source = { path = "." }
+
+# [package.build.config]
+# distro = "jazzy"  # or "humble", "noetic", etc.
+# # For debugging recipe output and other debug data
+# debug_dir = "./debug"
+
+# [[package.build.config.extra-package-mappings]]
+# # Lua is not available in robostack-jazzy, so we map it to the conda-forge lua package
+# lua-dev = { conda = ["lua"] }

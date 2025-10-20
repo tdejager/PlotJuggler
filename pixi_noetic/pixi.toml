@@ -1,0 +1,13 @@
+[package]
+[package.build]
+backend = { name = "pixi-build-ros", version = "*" }
+source = { path = "../" }
+
+[package.build.config]
+distro = "noetic"  # or "humble", "noetic", etc.
+# For debugging recipe output and other debug data
+debug-dir = "./debug"
+
+[[package.build.config.extra-package-mappings]]
+# Lua is not available in robostack-jazzy, so we map it to the conda-forge lua package
+lua-dev = { conda = ["lua"] }

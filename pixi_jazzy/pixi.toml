@@ -1,6 +1,7 @@
+[package]
 [package.build]
 backend = { name = "pixi-build-ros", version = "*" }
-source = "../"
+source = { path = "../" }
 
 [package.build.config]
 distro = "jazzy"  # or "humble", "noetic", etc.
