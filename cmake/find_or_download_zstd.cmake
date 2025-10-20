@@ -1,15 +1,38 @@
 function(find_or_download_zstd)
 
-  if(TARGET zstd::libzstd_static)
+  if(TARGET zstd::zstd)
     message(STATUS "ZSTD targets already defined")
     return()
   endif()
 
   find_package(ZSTD QUIET)
 
-  # Check if ZSTD targets already exist (e.g., from Arrow)
-  if(NOT TARGET zstd::libzstd_static)
-     message(STATUS "Downloading and compiling ZSTD")
+  # Determine which library type to use
+  if(PREFER_DYNAMIC_ZSTD)
+    set(ZSTD_PREFER_SHARED ON)
+    message(STATUS "ZSTD: Preferring dynamic library")
+  else()
+    set(ZSTD_PREFER_SHARED OFF)
+    message(STATUS "ZSTD: Preferring static library")
+  endif()
+
+  # Check if ZSTD targets already exist (e.g., from Arrow or find_package)
+  if(TARGET zstd::libzstd_static OR TARGET zstd::libzstd_shared)
+    message(STATUS "ZSTD found via find_package")
+
+    # Create the preferred alias target
+    if(ZSTD_PREFER_SHARED AND TARGET zstd::libzstd_shared)
+      add_library(zstd::zstd ALIAS zstd::libzstd_shared)
+      message(STATUS "ZSTD: Using shared library from find_package")
+    elseif(TARGET zstd::libzstd_static)
+      add_library(zstd::zstd ALIAS zstd::libzstd_static)
+      message(STATUS "ZSTD: Using static library from find_package")
+    elseif(TARGET zstd::libzstd_shared)
+      add_library(zstd::zstd ALIAS zstd::libzstd_shared)
+      message(STATUS "ZSTD: Falling back to shared library from find_package")
+    endif()
+  else()
+    message(STATUS "Downloading and compiling ZSTD")
 
     # zstd ###
     cpmaddpackage(
@@ -49,6 +72,9 @@ function(find_or_download_zstd)
     # now build both
     build_zstd_variant(STATIC static)
 
+    # Create the preferred alias
+    add_library(zstd::zstd ALIAS zstd::libzstd_static)
+    message(STATUS "ZSTD: Built static library from source")
   endif()
 
 endfunction()

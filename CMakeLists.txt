@@ -22,6 +22,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake")
 option(ENABLE_ASAN "Enable Address Sanitizer" OFF)
 option(BASE_AS_SHARED "Build the base library as a shared library" OFF)
 option(BUILDING_WITH_CONAN "Using Conan for dependencies" OFF)
+option(PREFER_DYNAMIC_ZSTD "Prefer dynamic linking for zstd library" OFF)
+option(PREFER_DYNAMIC_LZ4 "Prefer dynamic linking for lz4 library" OFF)
 
 if(NOT WIN32 AND ENABLE_ASAN)
   set(CMAKE_CXX_FLAGS

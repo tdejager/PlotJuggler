@@ -1,14 +1,37 @@
 function(find_or_download_lz4)
 
-  if(TARGET LZ4::lz4_static)
+  if(TARGET LZ4::lz4)
     message(STATUS "LZ4 targets already defined")
     return()
   endif()
 
   find_package(LZ4 QUIET)
 
-  # Check if LZ4 targets already exist (e.g., from Arrow)
-  if(NOT TARGET LZ4::lz4_static)
+  # Determine which library type to use
+  if(PREFER_DYNAMIC_LZ4)
+    set(LZ4_PREFER_SHARED ON)
+    message(STATUS "LZ4: Preferring dynamic library")
+  else()
+    set(LZ4_PREFER_SHARED OFF)
+    message(STATUS "LZ4: Preferring static library")
+  endif()
+
+  # Check if LZ4 targets already exist (e.g., from Arrow or find_package)
+  if(TARGET LZ4::lz4_static OR TARGET LZ4::lz4_shared)
+    message(STATUS "LZ4 found via find_package")
+
+    # Create the preferred alias target
+    if(LZ4_PREFER_SHARED AND TARGET LZ4::lz4_shared)
+      add_library(LZ4::lz4 ALIAS LZ4::lz4_shared)
+      message(STATUS "LZ4: Using shared library from find_package")
+    elseif(TARGET LZ4::lz4_static)
+      add_library(LZ4::lz4 ALIAS LZ4::lz4_static)
+      message(STATUS "LZ4: Using static library from find_package")
+    elseif(TARGET LZ4::lz4_shared)
+      add_library(LZ4::lz4 ALIAS LZ4::lz4_shared)
+      message(STATUS "LZ4: Falling back to shared library from find_package")
+    endif()
+  else()
     message(STATUS "Downloading and compiling LZ4")
 
     # lz4 ###
@@ -36,6 +59,9 @@ function(find_or_download_lz4)
     # now build both
     build_lz4_variant(STATIC static)
 
+    # Create the preferred alias
+    add_library(LZ4::lz4 ALIAS LZ4::lz4_static)
+    message(STATUS "LZ4: Built static library from source")
   endif()
 
 endfunction()
