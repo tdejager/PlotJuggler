@@ -18,10 +18,15 @@ channels = [
 ]
 
 [feature.jazzy.dependencies]
+ros-jazzy-ros-core = "*"
 ros-jazzy-plotjuggler = { path = "./pixi_jazzy" }
 
+# No RobotStack Plotjuggler plugin support for win-64
+[feature.jazzy.target.unix.dependencies]
+ros-jazzy-plotjuggler-ros = ">=2.3.0,<3"
+
 [feature.jazzy.tasks]
-start = "ros2 run plotjuggler plot"
+start = "ros2 run plotjuggler plotjuggler"
 
 # ROS1 build
 [feature.noetic]
@@ -29,7 +34,12 @@ channels = [
   "https://prefix.dev/robostack-noetic",  # or robostack-humble, robostack-noetic, etc.
 ]
 
+# No RoboStack Plotjuggler plugin support for win-64, osx-arm6
+[feature.noetic.target.linux-64.dependencies]
+ros-noetic-plotjuggler-ros = ">=2.1.1,<3"
+
 [feature.noetic.dependencies]
+ros-noetic-rosbash = "*"
 ros-noetic-plotjuggler = { path = "./pixi_noetic" }
 
 [feature.noetic.tasks]

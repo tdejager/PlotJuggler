@@ -4,4 +4,5 @@ backend = { name = "pixi-build-ros", version = "*" }
 source = { path = "../" }
 
 [package.build.config]
-distro = "jazzy"  # or "humble", "noetic", etc.
+# For debugging recipe output and other debug data
+debug_dir = "./debug"
