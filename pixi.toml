@@ -20,6 +20,9 @@ channels = [
 [feature.jazzy.dependencies]
 ros-jazzy-plotjuggler = { path = "./pixi_jazzy" }
 
+[feature.jazzy.tasks]
+start = "ros2 run plotjuggler plot"
+
 # ROS1 build
 [feature.noetic]
 channels = [
@@ -29,12 +32,15 @@ channels = [
 [feature.noetic.dependencies]
 ros-noetic-plotjuggler = { path = "./pixi_noetic" }
 
+[feature.noetic.tasks]
+start = "rosrun plotjuggler plotjuggler"
+
 # Environment for non-ROS build
 [feature.non-ros.dependencies]
 plotjuggler = { path = "./pixi_non_ros" }
 
 # Task to start plotjuggler
-[tasks]
+[feature.non-ros.tasks]
 start = "plotjuggler"
 
 # Environments for both a ros and non-ros build
