@@ -13,7 +13,8 @@ extra-args = ["-DPREFER_DYNAMIC_ZSTD=ON", "-DPREFER_DYNAMIC_LZ4=ON"]
 [package.host-dependencies]
 qt-main = ">=5.15.15,<6"
 lua = ">=5.4.8,<6"
-fmt = ">=12.0.0,<13"
+# fmt 12 requires C++20; pin to 11.x to keep the build on C++17.
+fmt = ">=11.0.0,<12"
 lz4-c = ">=1.9.4,<2"
 zstd = ">=1.5.7,<2"
 nlohmann_json = "*"

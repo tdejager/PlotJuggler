@@ -25,7 +25,8 @@ if(Protobuf_FOUND)
 
     if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         find_library(ABSL_SPINLOCK_WAIT_LIB absl_spinlock_wait)
-        target_link_libraries(ProtobufParser PRIVATE ${ABSL_SPINLOCK_WAIT_LIB} absl_log_internal_message)
+        find_library(ABSL_LOG_INTERNAL_MESSAGE_LIB absl_log_internal_message)
+        target_link_libraries(ProtobufParser PRIVATE ${ABSL_SPINLOCK_WAIT_LIB} ${ABSL_LOG_INTERNAL_MESSAGE_LIB})
         target_compile_definitions(ProtobufParser PRIVATE QT_PLUGIN)
     endif()
 
